@@ -1,0 +1,254 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Estilos del encabezado */
+.header_MainPanel_bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Reparte espacio entre secciones */
+  padding: 15px 30px;
+  background-color: #1FAE90;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  flex-wrap: wrap; /* Para que no se descuadre en pantallas pequeñas */
+}
+
+/* Secciones del header */
+.header_left,
+.header_center,
+.header_right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header_center {
+  flex-grow: 1;
+  justify-content: center; /* Centra la barra en el espacio disponible */
+}
+
+/* Icono en el encabezado */
+.header_MainPanel_icon {
+  width: 70px; /* Ajusta según tu gusto */
+  height: auto;
+  margin-right: 10px;
+}
+
+/* Título en el encabezado */
+.header_MainPanel_tittle {
+  font-family: 'Outfit', sans-serif;
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+/* Mensaje Pasa la página, comparte magia */
+.header_MainPanel_message {
+  display: flex;          /* Para alinear ícono y texto en línea */
+  align-items: center;    /* Centra verticalmente */
+  justify-content: center;/* Centra horizontalmente */
+  gap: 8px;               /* Espacio entre ícono y texto */
+  background-color: #C3F6E2;
+  padding: 8px 0;
+  text-align: center;
+  font-weight: bold;
+  color: #1FAE90;
+  width: 100%;
+  margin: 0; /* O el margen que prefieras */
+}
+
+.message_icon {
+  font-size: 20px;  /* Ajusta el tamaño del ícono */
+  color: #1FAE90;   /* O el color que prefieras */
+}
+
+/* Contenedor de la barra de búsqueda */
+.search-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 20px;
+  padding: 5px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 300px; /* Ajusta el ancho fijo o usa un porcentaje */
+  max-width: 100%;
+}
+
+.search-bar {
+  padding: 8px;
+  border: none;
+  outline: none;
+  width: 100%;
+  border-radius: 20px;
+  font-size: 16px;
+}
+
+.search-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #1FAE90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botones de registro e iniciar sesión */
+.login_btn_MainPanel,
+.register_btn_MainPanel {
+  background-color: #00736C;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Efecto al pasar el cursor por botones */
+.login_btn_MainPanel:hover,
+.register_btn_MainPanel:hover {
+  background-color: #a9e9e5;
+}
+
+/* Contenedor principal MainPanel */
+.main_container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Contenido Panel Principal */
+.panel_content {
+  flex: 1;
+  background: linear-gradient(to bottom, #f0faf8, #fff);
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+/* About Section */
+.about {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(225, 235, 236, 0.5);
+  padding: 30px;
+  margin: 20px;
+  border-radius: 10px;
+  text-align: justify;
+  color: rgb(44, 40, 40);
+  width: 100%;
+}
+
+/* Texto sobre nosotros */
+.about_text {
+  flex: 1;
+  padding-right: 20px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Expert Section */
+.expert_path {
+  background: rgba(225, 235, 236, 0.5);
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  color: black;
+  text-align: center;
+  width: 100%;
+}
+
+/* Opciones de expertos */
+.expert_options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Tarjetas de expertos */
+.expert_card {
+  text-align: center;
+  padding: 10px;
+  margin: 10px;
+  background: rgba(225, 235, 236, 0.5);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1 1 300px;
+  max-width: 300px;
+  color: black;
+}
+
+/* Efecto hover para las tarjetas de expertos */
+.expert_card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Icono de expertos */
+.expert_icon {
+  font-size: 70px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+.footer_MainPanel {
+  text-align: center;
+  padding: 5px;
+  background-color: #1FAE90;
+  font-weight: bold;
+  color: white;
+  width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .expert_card {
+    flex: 1 1 45%;
+    max-width: 45%;
+  }
+}
+
+@media (max-width: 600px) {
+  .header_MainPanel_bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .header_left,
+  .header_center,
+  .header_right {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .login_btn_MainPanel {
+    align-self: center;
+    margin-top: 10px;
+  }
+
+  .expert_card {
+    flex: 1 1 90%;
+    max-width: 90%;
+  }
+
+  .about {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about_text {
+    padding-right: 0;
+    margin-bottom: 20px;
+  }
+}
