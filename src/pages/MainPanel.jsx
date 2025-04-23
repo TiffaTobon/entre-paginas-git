@@ -3,6 +3,7 @@ import "../styles/MainPanel.css"; // Estilos personalizados para el componente M
 import SearchBar from "../Components/components";
 import Registro from "../pages/Register";
 import { Link } from "react-router-dom";
+import ChatBox from "../chat/ChatBox";
 
 //Importamos los componentes Hijos
 import Auth from "../Components/Auth";
@@ -108,6 +109,10 @@ const MainPanel = ({ setMainComponent }) => {
             />
           </div>
         </section>
+      </div>
+       {/* 🟢 Aquí añadimos el chat */}
+       <div className="chatbox_container">
+        <ChatBox />
       </div>
       <footer className="footer_MainPanel">
         <p className="footer_MainPanel_text">
