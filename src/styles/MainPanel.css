@@ -250,3 +250,87 @@
   line-height: 1.6;
 }
 
+/* Botón flotante para abrir el chat */
+.open-sidebar-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #5D4037; /* color tierra */
+  color: #F4E1C1; /* color claro */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.open-sidebar-button:hover {
+  background-color: #8D6E63;
+  transform: scale(1.05);
+}
+
+/* Estilos de la barra lateral del chat */
+.sidebar-chat {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background-color: #F4E1C1; /* fondo claro */
+  color: #5D4037; /* texto oscuro */
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Encabezado del chat */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: #EBD2B4;
+  border-bottom: 1px solid #D7B89C;
+}
+
+/* Cuerpo del chat */
+.sidebar-body {
+  padding: 12px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Campo de entrada del chat */
+.chat-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  margin-top: 20px;
+  background-color: #fff;
+  color: #5D4037;
+  font-family: 'Outfit', sans-serif;
+}
+
+.chat-input::placeholder {
+  color: #A1887F;
+}
+
+/* Botón de cerrar */
+button {
+  background: none;
+  border: none;
+  color: #5D4037;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.1);
+}

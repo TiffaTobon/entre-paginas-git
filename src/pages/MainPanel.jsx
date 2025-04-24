@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/MainPanel.css";
 import { Link } from "react-router-dom";
+import { BiSolidBookReader } from "react-icons/bi"; // Icono del chat
 import logo from "../assets/Images/logoEntrePaginas.jpg";
 
 const Header = () => {
@@ -30,6 +31,7 @@ const ExpertCard = ({ title, link }) => {
 };
 
 const MainPanel = () => {
+  const [showChat, setShowChat] = useState(false); // Estado para manejar el chat
   return (
     <div className="main_container" style={{ fontFamily: "Tiland, sans-serif" }}>
       <Header />
@@ -51,6 +53,32 @@ const MainPanel = () => {
           </div>
         </section>
       </div>
+
+
+      {/* Botón fijo para abrir el chat */}
+      {!showChat && (
+        <button className="open-sidebar-button" onClick={() => setShowChat(true)}>
+          💬
+        </button>
+      )}
+
+      {/* Barra lateral del chat */}
+      {showChat && (
+        <div className="sidebar-chat">
+          <div className="sidebar-header">
+            <p>💬 Chat de ayuda</p>
+            <button onClick={() => setShowChat(false)}>✖</button>
+          </div>
+          <div className="sidebar-body">
+            <p><strong>¡Hola!</strong> ¿En qué podemos ayudarte?</p>
+            <input
+              type="text"
+              placeholder="Escribe tu mensaje..."
+              className="chat-input"
+            />
+          </div>
+        </div>
+      )}
       <footer className="footer_MainPanel">
         <p className="footer_text">© Todos los derechos reservados - Entre Páginas 2025</p>
       </footer>
