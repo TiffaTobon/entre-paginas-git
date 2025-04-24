@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/MainPanel.css";
 import { Link } from "react-router-dom";
+import { BiSolidBookReader } from "react-icons/bi"; // Icono del chat
 import logo from "../assets/Images/logoEntrePaginas.jpg";
 
 const Header = () => {
@@ -30,14 +31,23 @@ const ExpertCard = ({ title, link }) => {
 };
 
 const MainPanel = () => {
+  const [showChat, setShowChat] = useState(false); // Estado para manejar el chat
+  const [inputMessage, setInputMessage] = useState('');
+  const [messages, setMessages] = useState([]);
+
+  const handleSendMessage = () => {
+    if (inputMessage.trim() !== '') {
+      setMessages([...messages, inputMessage]); // Guardamos el nuevo mensaje
+      setInputMessage(''); // Limpiamos el campo de entrada
+    }
+  };
+
   return (
     <div className="main_container" style={{ fontFamily: "Tiland, sans-serif" }}>
       <Header />
       <section className="expert_path left_aligned_options moved_left">
-      <div className="image_background">
-
-      </div>
-</section>
+        <div className="image_background"></div>
+      </section>
 
       <div className="panel_content">
         <section className="about">
@@ -51,6 +61,47 @@ const MainPanel = () => {
           </div>
         </section>
       </div>
+
+      {/* Botón fijo para abrir el chat */}
+      {!showChat && (
+        <button className="open-sidebar-button" onClick={() => setShowChat(true)}>
+          💬
+        </button>
+      )}
+
+      {/* Barra lateral del chat */}
+      {showChat && (
+        <div className="sidebar-chat">
+          <div className="sidebar-header">
+            <p>💬 Chat de ayuda</p>
+            <button onClick={() => setShowChat(false)}>✖</button>
+          </div>
+          <div className="sidebar-body">
+            <p><strong>¡Hola!</strong> ¿En qué podemos ayudarte?</p>
+            {/* Mostrar los mensajes enviados */}
+            <div className="chat-messages">
+              {messages.map((msg, index) => (
+                <div key={index} className="chat-message">{msg}</div>
+              ))}
+            </div>
+            {/* Campo de entrada de texto y botón */}
+            <div className="chat-input-container">
+              <input
+                type="text"
+                placeholder="Escribe tu mensaje..."
+                className="chat-input"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSendMessage();
+                }}
+              />
+              <button className="send-button" onClick={handleSendMessage}>Enviar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <footer className="footer_MainPanel">
         <p className="footer_text">© Todos los derechos reservados - Entre Páginas 2025</p>
       </footer>
