@@ -1,28 +1,24 @@
 import React, { useEffect, useState } from "react";
 import "../styles/BookCards.css";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
-import { Link } from "react-router-dom";
-import { FaShoppingCart} from "react-icons/fa";
-
+import { FaShoppingCart } from "react-icons/fa";
+import { useCart } from "../context/CartContext";
 
 const BookCards = ({ searchTerm, limit, showPagination = true }) => {
+  const { addToCart } = useCart(); // ✅ Hook dentro del componente
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [info, setInfo] = useState({});
 
   useEffect(() => {
     const fetchBooks = async () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://openlibrary.org/search.json?title=${
-            searchTerm || "harry"
-          }&page=${page}`
+          `https://openlibrary.org/search.json?title=${searchTerm || "harry"}&page=${page}`
         );
         const data = await response.json();
         setBooks(data.docs.slice(0, 20));
-        setInfo({ total: data.numFound });
       } catch (error) {
         console.error("Error al obtener libros:", error);
       }
@@ -35,7 +31,6 @@ const BookCards = ({ searchTerm, limit, showPagination = true }) => {
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
 
-  // Limitar libros si se pasa prop "limit"
   const librosAMostrar = limit ? books.slice(0, limit) : books;
 
   if (loading) return <p>Cargando libros...</p>;
@@ -56,23 +51,30 @@ const BookCards = ({ searchTerm, limit, showPagination = true }) => {
             />
             <h4>{book.title}</h4>
             <p>{book.author_name?.join(", ")}</p>
-            <p>
-              <small>{book.first_publish_year || "Año desconocido"}</small>
-            </p>
-            <Link to="/shopping-cart" className="buy-button">
-            <FaShoppingCart className="sidebar_icon" /> Añadir al carrito
-          </Link>
+            <p><small>{book.first_publish_year || "Año desconocido"}</small></p>
+            <button
+              onClick={() =>
+                addToCart({
+                  title: book.title,
+                  author: book.author_name,
+                  year: book.first_publish_year,
+                  image: book.cover_i
+                    ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
+                    : placeholderImage,
+                })
+              }
+              className="buy-button"
+            >
+              <FaShoppingCart style={{ gap: "8px" }} />
+              Añadir al carrito
+            </button>
           </li>
         ))}
       </ul>
 
       {showPagination && (
         <div className="pagination-buttons">
-          <button
-            onClick={handlePrev}
-            disabled={page === 1}
-            className="pagination-button"
-          >
+          <button onClick={handlePrev} disabled={page === 1} className="pagination-button">
             Anterior
           </button>
           <button onClick={handleNext} className="pagination-button">

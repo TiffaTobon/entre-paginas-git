@@ -1,16 +1,19 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/Images/logoEntrePaginas.jpg";
+import { FaShoppingCart } from "react-icons/fa";
+import { useCart } from "../context/CartContext";
 
 const Header = ({ searchTerm, onSearchChange }) => {
   const navigate = useNavigate();
+  const { cartCount } = useCart();
 
   const handleLogout = () => {
     navigate("/");
   };
 
   const handleSearch = (e) => {
-    e.preventDefault(); // Previene recarga
+    e.preventDefault();
   };
 
   return (
@@ -36,6 +39,10 @@ const Header = ({ searchTerm, onSearchChange }) => {
       </div>
 
       <div className="header_right">
+        <Link to="/shopping-cart" className="cart-link">
+          <FaShoppingCart />
+          {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+        </Link>
         <button className="logout_btn_WorkSpace" onClick={handleLogout}>
           Cerrar sesión
         </button>
@@ -44,4 +51,4 @@ const Header = ({ searchTerm, onSearchChange }) => {
   );
 };
 
-export default Header;
+export default Header; // 👈 ASEGÚRATE de tener esta línea
