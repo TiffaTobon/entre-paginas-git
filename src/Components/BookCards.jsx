@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "../styles/BookCards.css";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
+import { Link } from "react-router-dom";
+import { FaShoppingCart} from "react-icons/fa";
+
 
 const BookCards = ({ searchTerm, limit, showPagination = true }) => {
   const [books, setBooks] = useState([]);
@@ -56,6 +59,9 @@ const BookCards = ({ searchTerm, limit, showPagination = true }) => {
             <p>
               <small>{book.first_publish_year || "Año desconocido"}</small>
             </p>
+            <Link to="/shopping-cart" className="buy-button">
+            <FaShoppingCart className="sidebar_icon" /> Añadir al carrito
+          </Link>
           </li>
         ))}
       </ul>

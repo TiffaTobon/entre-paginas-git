@@ -34,11 +34,9 @@ const MainPanel = () => {
     <div className="main_container" style={{ fontFamily: "Tiland, sans-serif" }}>
       <Header />
       <section className="expert_path left_aligned_options moved_left">
-  <div className="expert_options">
-    <ExpertCard title="Comprar" link="/comprar" />
-    <ExpertCard title="Vender" link="/vender" />
-    <ExpertCard title="Intercambiar" link="/intercambiar" />
-  </div>
+      <div className="image_background">
+
+      </div>
 </section>
 
       <div className="panel_content">

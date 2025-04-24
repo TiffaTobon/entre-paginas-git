@@ -10,7 +10,7 @@ import EditBook from "../pages/EditBook";
 import ProfileEdit from "../pages/ProfileEdit";
 import AllBooks from "../pages/AllBooks";
 import ManageBooks from "../pages/ManageBooks";
-
+import ShoppingCart from "../pages/ShoppingCart";
 
 const RoutesComponent = () => {
   return (
@@ -23,8 +23,12 @@ const RoutesComponent = () => {
       <Route path="/add-book" element={<AddBook />} />
       <Route path="/edit-book/:id" element={<EditBook />} />
       <Route path="/profile-edit" element={<ProfileEdit />} />
+      <Route path="/all-books" element={<AllBooks />} />
+      <Route path="/shopping-cart" element={<ShoppingCart />} />
     </Routes>
   );
 };
 
 export default RoutesComponent;
+
+

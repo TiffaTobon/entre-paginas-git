@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaEdit, FaUserEdit } from "react-icons/fa";
+import { FaEdit, FaUserEdit, FaExchangeAlt, FaSellcast } from "react-icons/fa";
 import "../styles/Sidebar.css";
 
 const Sidebar = () => {
@@ -16,6 +16,16 @@ const Sidebar = () => {
         <li>
           <Link to="/manage-books" className="sidebar_link">
             <FaEdit className="sidebar_icon" /> Mis Libros
+          </Link>
+        </li>
+        <li>
+          <Link to="/manage-books" className="sidebar_link">
+            <FaExchangeAlt className="sidebar_icon" /> Intercambiar
+          </Link>
+        </li>
+        <li>
+          <Link to="/manage-books" className="sidebar_link">
+            <FaSellcast className="sidebar_icon" /> Vender
           </Link>
         </li>
       </ul>

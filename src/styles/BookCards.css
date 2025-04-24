@@ -71,3 +71,43 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
+
+  .bookcards-item {
+    position: relative;
+    flex: 0 1 calc(25% - 40px); /* 4 tarjetas por fila con margen */
+    box-sizing: border-box;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #F4E1C1;
+    transition: transform 0.3s ease;
+  }
+  
+  .bookcards-item:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Ocultar el botón de compra por defecto */
+  .buy-button {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background-color: #5D4037;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    justify-content: center;
+  }
+  
+  /* Mostrar el botón cuando se hace hover en la tarjeta */
+  .bookcards-item:hover .buy-button {
+    display: flex;
+  }
+  

@@ -19,6 +19,17 @@
 
 }
 
+.image_background{
+  background-image: url("../assets/Images/fondomain2.jpg"); /* Cambia 'fondo.jpg' por el nombre de tu imagen */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 
 
 
