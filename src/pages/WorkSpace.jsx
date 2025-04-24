@@ -1,53 +1,43 @@
-import React from "react";
-/*import "../styles/" // Estilos personalizados para el componente WorkSpace.*/
-import "./WorkSpace" // Funciones personalizadas para el componente WorkSpace.
+import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import Header from "../Components/Header";
+import Sidebar from "../Components/Sidebar";
+import BookCards from "../Components/BookCards";
+import UserBooks from "../Components/UserBooks";
+import "../styles/WorkSpace.css";
+import "../styles/Header.css";
 
-/*Importamos los componentes Hijos
-import Tutoring from "../../pages/Tutoring/Tutoring.jsx"
-import Routes from "../../pages/Routes/Routes.jsx";
-import Forum from "../../pages/Forum/Forum.jsx";
-import Calendar from "../../pages/Calendar/Calendar.jsx";*/
+const WorkSpace = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate(); // ⬅️ lo agregas aquí
 
-/*
-    Descripción.
+  return (
+    <>
+      <Header searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+      <div className="workspace_container">
+        <Sidebar />
+        <div className="workspace_content_wrapper">
+          <div className="workspace_content">
+            <h2>Libros Destacados</h2>
+            <BookCards searchTerm={searchTerm} limit={8} showPagination={false} />
 
-    Lista de parámetros.
+            <div style={{ textAlign: "center", marginTop: "15px" }}>
+              <button className="btn-primary" onClick={() => navigate("/all-books")}>
+                Ver todos los libros
+              </button>
+            </div>
 
-        * Parámetro1 (tipo): Descripción.
+            <UserBooks />
+          </div>
 
-    Retornos:
-
-        * retorno1 (tipo): Descripción.
-*/
-
-//Recibimos desde App.jsx el prop de buttonSelected, el cual almacena el valor del botón seleccionado en el navbar
-const WorkSpace = ({buttonSelected}) => {
-    // Variables.
-
-    // Constantes.
-
-
-    /*Constante que permite la páginación de cada componente, según la opción guardada en buttonSelected, me renderiza dicho componente mediante el switch.
-    const renderSections = () => {
-        switch(buttonSelected){ //Segun la identidad guardada en el estado buttonSelected, se ejecuta el case y retorna el componente que pertenece a ese botón.
-          case "Tutorias": return <Tutoring/>;
-          case "Mis Rutas": return <Routes/>;
-          case "Foro": return <Forum/>;
-          case "Calendario": return <Calendar/>;
-        }
-    }*/
-
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    // Componente.
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-
-    return(
-        <div className="textSections"> {/*Bloque que almacena el componente renderizado.*/}
-            {renderSections()} {/*Llamamos la función para renderizar el componente. */}
+          <footer className="footer_Workspace">
+            <p className="footer_Workspace_text">
+              © Todos los derechos reservados - Entre Páginas 2025
+            </p>
+          </footer>
         </div>
-    )
-}
-
+      </div>
+    </>
+  );
+};
 export default WorkSpace;

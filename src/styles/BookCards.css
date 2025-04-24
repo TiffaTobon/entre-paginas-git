@@ -1,0 +1,73 @@
+.bookcards-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .bookcards-search {
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .bookcards-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .bookcards-item {
+    flex: 0 1 calc(25% - 40px); /* 4 tarjetas por fila con margen */
+    box-sizing: border-box;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #F4E1C1;
+    transition: transform 0.3s ease;
+  }
+  
+  .bookcards-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .bookcards-image {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    object-fit: cover;
+  }
+  
+  .pagination-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+  }
+  
+  .pagination-button {
+    background-color: #5D4037;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination-button:hover {
+    background-color: #F4E1C1;
+  }
+  
+  .pagination-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }

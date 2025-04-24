@@ -1,52 +1,21 @@
+// Auth.jsx
 import React, { useState } from "react";
-/*import "./Auth.css" // Estilos personalizados para el componente Auth.
-import "./Auth.js" // Funciones personalizadas para el componente Auth.*/
+import Login from "../pages/Login";
+import Register from "../pages/Register.jsx";
 
-//Importamos los componentes Hijos
-import Login from "../pages/Login"
-import Register from "../pages/Register.jsx"
+const Auth = ({ setMainComponent, defaultMode = "login" }) => {
+  // Si defaultMode es "register", iniciamos mostrando el formulario de registro
+  const [visRegister, setVisRegister] = useState(defaultMode === "register");
 
-/*
-    Descripción.
-
-    Lista de parámetros.
-
-        * Parámetro1 (tipo): Descripción.
-
-    Retornos:
-
-        * retorno1 (tipo): Descripción.
-*/
-
-const Auth = ({setMainComponent}) => {
-    // Variables.
-
-    // Constantes.
-    const [visRegister, setVisRegister] = useState(false);
-
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    // Funciones.
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
- 
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    // Componente.
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-
-
-    return(
-        <>
-            {visRegister ? (
-                <Register/>
-            ) : (
-                <Login setVisRegister={setVisRegister} setMainComponent={setMainComponent}/>
-            )}
-        
-        </>
-    )
-}
+  return (
+    <>
+      {visRegister ? (
+        <Register />
+      ) : (
+        <Login setVisRegister={setVisRegister} setMainComponent={setMainComponent} />
+      )}
+    </>
+  );
+};
 
 export default Auth;

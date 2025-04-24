@@ -1,42 +1,113 @@
-import React from "react";
-import "./Register" // Funciones personalizadas para el componente Register.
-import "../styles/Register.css" // Estilos personalizados para el componente Register.
+import React, { useState } from "react";
 
-/*
-    Descripción.
+const UserForm = ({ onSubmit, mode }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    nombres: "",
+    apellidos: "",
+    fechaNacimiento: "",
+    genero: "",
+    aceptoTerminos: false,
+  });
 
-    Lista de parámetros.
+  // Función para manejar los cambios en el formulario
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
-        * Parámetro1 (tipo): Descripción.
+  // Función para manejar el submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
 
-    Retornos:
+  return (
+    <form onSubmit={handleSubmit} className="registro-container">
+      <h2>Registro</h2>
+      
+      <label htmlFor="email">Correo Electrónico:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+      />
 
-        * retorno1 (tipo): Descripción.
-*/
+      <label htmlFor="password">Contraseña:</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        value={formData.password}
+        onChange={handleChange}
+      />
 
-const Register = () => {
+      <label htmlFor="nombres">Nombres:</label>
+      <input
+        type="text"
+        id="nombres"
+        name="nombres"
+        value={formData.nombres}
+        onChange={handleChange}
+      />
 
-    // Variables.
+      <label htmlFor="apellidos">Apellidos:</label>
+      <input
+        type="text"
+        id="apellidos"
+        name="apellidos"
+        value={formData.apellidos}
+        onChange={handleChange}
+      />
 
-    // Constantes.
+      <label htmlFor="fechaNacimiento">Fecha de Nacimiento:</label>
+      <input
+        type="date"
+        id="fechaNacimiento"
+        name="fechaNacimiento"
+        value={formData.fechaNacimiento}
+        onChange={handleChange}
+      />
 
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    // Funciones.
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
- 
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
-    // Componente.
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
+      <label htmlFor="genero">Género:</label>
+      <select
+        id="genero"
+        name="genero"
+        value={formData.genero}
+        onChange={handleChange}
+      >
+        <option value="">Selecciona un género</option>
+        <option value="masculino">Masculino</option>
+        <option value="femenino">Femenino</option>
+        <option value="otro">Otro</option>
+      </select>
 
-    return(
-        <>
-            Espacio para trabajar El registro de usuario.
-        </>
-    )
-}
+      <div className="checkbox-container">
+        <input
+          type="checkbox"
+          id="aceptoTerminos"
+          name="aceptoTerminos"
+          checked={formData.aceptoTerminos}
+          onChange={handleChange}
+        />
+        <label htmlFor="aceptoTerminos">
+          Acepto los <a href="/terms">términos y condiciones</a>
+        </label>
+      </div>
 
-export default Register;
+      <div className="button-container">
+        <button type="submit" className="btn-submit">
+          {mode === "register" ? "Registrar" : "Registrar" }
+        </button>
+      </div>
+    </form>
+  );
+};
+
+export default UserForm;

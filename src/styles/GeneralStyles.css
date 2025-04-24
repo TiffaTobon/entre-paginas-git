@@ -1,14 +1,12 @@
 /* Importación de la tipografía general */
 /*Fuente primaria*/
-@font-face {
-    font-family: 'Outfit' ;
-    src: url('../fonts/Outfit-VariableFont_wght.ttf');
-}
-/*Fuente secundaria*/
-@font-face {
-    font-family: 'Manrope' ;
-    src: url('../fonts/Manrope-VariableFont_wght.ttf');
-}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  p button {
+    font-family: 'Montserrat', sans-serif;
+  }
 
 :root{ /*Deshabilitamos la opción para seleccionar elementos en la aplicación*/
     user-select: none;
