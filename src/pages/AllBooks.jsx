@@ -17,7 +17,7 @@ const AllBooks = () => {
 
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <button className="btn-secondary" onClick={() => navigate("/workspace")}>
-            ← Volver al WorkSpace
+            ← Volver
           </button>
         </div>
       </div>

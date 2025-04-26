@@ -97,7 +97,7 @@ const UserForm = ({ onSubmit, mode }) => {
           onChange={handleChange}
         />
         <label htmlFor="aceptoTerminos">
-          Acepto los <a href="/terms">términos y condiciones</a>
+         <a href="/terms">Acepto los términos y condiciones</a>
         </label>
       </div>
 

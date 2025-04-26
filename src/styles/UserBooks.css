@@ -34,7 +34,7 @@
 }
 
 .user-book-card h4 {
-  color: #1FAE90;
+  color: #5D4037;
   margin-bottom: 10px;
   font-size: 18px;
 }
@@ -51,7 +51,7 @@
 }
 
 .btn-edit {
-  background-color: #1FAE90;
+  background-color: #5D4037;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -61,11 +61,11 @@
 }
 
 .btn-edit:hover {
-  background-color: #158e76;
+  background-color: #5D4037;
 }
 
 .btn-delete {
-  background-color: #333;
+  background-color: #5D4037;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -75,11 +75,11 @@
 }
 
 .btn-delete:hover {
-  background-color: #000;
+  background-color:  #5D4037;
 }
 
 .btn-primary {
-  background-color: #1FAE90;
+  background-color:  #5D4037;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -90,13 +90,13 @@
 }
 
 .btn-primary:hover {
-  background-color: #158e76;
+  background-color: #5D4037;
 }
 
 .btn-secondary {
-  background-color: transparent;
-  color: #1FAE90;
-  border: 1px solid #1FAE90;
+  background-color: #5D4037;
+  color:  white;
+  border: 1px solid  #5D4037;
   padding: 8px 16px;
   border-radius: 8px;
   font-weight: 600;
@@ -105,7 +105,7 @@
 }
 
 .btn-secondary:hover {
-  background-color: #e7f9f6;
+  background-color: #5D4037;
 }
 
 .empty-book-card {
