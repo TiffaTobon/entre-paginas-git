@@ -1,7 +1,7 @@
 // routes/resenas.js
-const express = require('express');
-const Resena = require('../models/Resena');
-const { verifyToken } = require('../middlewares/auth');
+import express from 'express';
+import Resena from '../models/Resena.js';
+import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -16,5 +16,6 @@ router.get('/:idLibro', async (req, res) => {
   res.json(resenas);
 });
 
-module.exports = router;
+export default router;
+
 

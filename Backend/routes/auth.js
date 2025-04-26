@@ -1,26 +1,27 @@
 // routes/auth.js
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const Usuario = require('../models/Usuario');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import Usuario from '../models/Usuario.js';
 
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
-  const { nombre, email, contraseña } = req.body;
-  const hashedPassword = await bcrypt.hash(contraseña, 10);
-  const usuario = await Usuario.create({ nombre, email, contraseña: hashedPassword });
+  const { nombre, email, contrasena } = req.body;
+  const hashedPassword = await bcrypt.hash(contrasena, 10);
+  const usuario = await Usuario.create({ nombre, email, contrasena: hashedPassword });
   res.status(201).json(usuario);
 });
 
 router.post('/login', async (req, res) => {
-  const { email, contraseña } = req.body;
+  const { email, contrasena } = req.body;
   const usuario = await Usuario.findOne({ where: { email } });
-  if (!usuario || !await bcrypt.compare(contraseña, usuario.contraseña)) {
-    return res.status(401).json({ message: 'Credenciales incorrectas' });
+  if (!usuario || !await bcrypt.compare(contrasena, usuario.contrasena)) {
+    return res.status(401).json({ error: 'Credenciales inválidas' });
   }
-  const token = jwt.sign({ id: usuario.id }, 'secret_key', { expiresIn: '1h' });
+  const token = jwt.sign({ id: usuario.id }, 'secret_key');
   res.json({ token });
 });
 
-module.exports = router;
+export default router;
+

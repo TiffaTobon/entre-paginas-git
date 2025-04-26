@@ -1,14 +1,25 @@
 // server.js
-const express = require('express');
-const sequelize = require('./config/database.js');
-const authRoutes = require('./routes/auth');
-const librosRoutes = require('./routes/libros');
-const transaccionesRoutes = require('./routes/transacciones');
-const resenasRoutes = require('./routes/resenas');
+import express from 'express';
+import sequelize from './db.js';
+import authRoutes from './routes/auth.js';
+import libroRoutes from './routes/libros.js';
+import transaccionRoutes from './routes/transacciones.js';
+import resenaRoutes from './routes/resenas.js';
+import mensajeRoutes from './routes/mensajes.js';
+import notificacionRoutes from './routes/notificaciones.js';
 
 const app = express();
 app.use(express.json());
 
 app.use('/auth', authRoutes);
-app.use('/libros', librosRoutes);
-app.use
+app.use('/libros', libroRoutes);
+app.use('/transacciones', transaccionRoutes);
+app.use('/resenas', resenaRoutes);
+app.use('/mensajes', mensajeRoutes);
+app.use('/notificaciones', notificacionRoutes);
+
+sequelize.sync().then(() => {
+  app.listen(3000, () => {
+    console.log('Servidor corriendo en el puerto 3000');
+  });
+});

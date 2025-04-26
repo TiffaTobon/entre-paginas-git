@@ -1,8 +1,7 @@
-
 // routes/libros.js
-const express = require('express');
-const Libro = require('../models/Libro');
-const { verifyToken } = require('../middlewares/auth');
+import express from 'express';
+import Libro from '../models/Libro.js';
+import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -26,4 +25,4 @@ router.delete('/:id', verifyToken, async (req, res) => {
   res.status(204).end();
 });
 
-module.exports = router;
+export default router;

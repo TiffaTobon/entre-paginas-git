@@ -1,19 +1,19 @@
 // models/Libro.js
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+import { DataTypes } from 'sequelize';
+import sequelize from '../db.js';
 
 const Libro = sequelize.define('Libro', {
   id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-  titulo: { type: DataTypes.STRING, allowNull: false },
-  descripcion: { type: DataTypes.TEXT, allowNull: false },
-  autor: { type: DataTypes.STRING, allowNull: false },
-  precio: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
-  imagen: { type: DataTypes.TEXT, allowNull: false },
-  stock: { type: DataTypes.INTEGER, allowNull: false },
-  usuario_id: { type: DataTypes.INTEGER, references: { model: 'Usuarios', key: 'id' } }
+  titulo: { type: DataTypes.STRING, allowNull: true },
+  descripcion: { type: DataTypes.TEXT, allowNull: true },
+  autor: { type: DataTypes.STRING, allowNull: true },
+  precio: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
+  imagen: { type: DataTypes.TEXT, allowNull: true },
+  stock: { type: DataTypes.INTEGER, allowNull: true },
+  usuario_id: { type: DataTypes.INTEGER, references: { model: 'Usuario', key: 'id' } }
 });
 
-module.exports = Libro;
+export default Libro;
 
 
 
