@@ -1,7 +1,5 @@
 import express from 'express';
 import { Sequelize } from 'sequelize';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
 const sequelize = new Sequelize('entrepaginas', 'usuario', 'contraseña', {
   host: 'localhost',
