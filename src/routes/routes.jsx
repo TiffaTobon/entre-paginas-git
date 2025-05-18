@@ -25,6 +25,7 @@ const RoutesComponent = () => {
       <Route path="/profile-edit" element={<ProfileEdit />} />
       <Route path="/all-books" element={<AllBooks />} />
       <Route path="/shopping-cart" element={<ShoppingCart />} />
+      <Route path="/add-book" element={<AddBook />} />
     </Routes>
   );
 };

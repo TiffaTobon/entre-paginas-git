@@ -5,7 +5,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 
 const BookCards = ({ searchTerm, limit, showPagination = true }) => {
-  const { addToCart } = useCart(); // ✅ Hook dentro del componente
+  const { addToCart } = useCart(); // Hook dentro del componente
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
