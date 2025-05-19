@@ -1,12 +1,14 @@
-// src/pages/AddBook.jsx
 import React, { useState, useEffect } from "react";
-import { getAuth } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import {
+  TextField,
+  Button,
+  Typography,
+  Stack,
+  Box,
+} from "@mui/material";
 import axios from "axios";
-import "../styles/AddBook.css";
 
-const AddBook = () => {
-  const navigate = useNavigate();
+const AddBook = ({ onClose, onSuccess }) => {
   const [usuarioId, setUsuarioId] = useState(null);
   const [formData, setFormData] = useState({
     titulo: "",
@@ -18,14 +20,10 @@ const AddBook = () => {
   });
 
   useEffect(() => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        setUsuarioId(payload.id); //  ID base de datos
-      } 
+    const token = localStorage.getItem("token");
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setUsuarioId(payload.id);
     }
   }, []);
 
@@ -39,31 +37,26 @@ const AddBook = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!usuarioId) {
-      alert("Usuario no autenticado");
-      return;
-    }
+    if (!usuarioId) return alert("Usuario no autenticado");
 
     const data = new FormData();
-    data.append("titulo", formData.titulo);
-    data.append("descripcion", formData.descripcion);
-    data.append("autor", formData.autor);
-    data.append("precio", formData.precio);
-    data.append("stock", formData.stock);
+    for (const key in formData) {
+      data.append(key, formData[key]);
+    }
     data.append("usuario_id", usuarioId);
-    data.append("imagen", formData.imagen);
-
-    const token = localStorage.getItem("token");
 
     try {
+      const token = localStorage.getItem("token");
       await axios.post("http://localhost:3000/libros", data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
+
       alert("Libro agregado correctamente");
-      navigate("/manage-books");
+      if (onSuccess) onSuccess(); // recarga libros
+      if (onClose) onClose(); // cierra modal
     } catch (error) {
       console.error("Error al agregar libro:", error);
       alert("Error al agregar el libro");
@@ -71,70 +64,36 @@ const AddBook = () => {
   };
 
   return (
-    <div className="add-book-wrapper">
-      <div className="add-book-container">
-        <h2 className="add-book-title">Agregar Libro</h2>
-        <form onSubmit={handleSubmit} className="add-book-form">
-          <input
-            type="text"
-            name="titulo"
-            placeholder="Título"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="autor"
-            placeholder="Autor"
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="descripcion"
-            placeholder="Descripción"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="precio"
-            placeholder="Precio (COP)"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="stock"
-            placeholder="Cantidad en stock"
-            onChange={handleChange}
-            required
-          />
-          <label htmlFor="imagen" style={{ color: "#5D4037", fontWeight: "bold" }}>
-            Imagen del libro (jpg, png)
-          </label>
-          <input
-            type="file"
-            name="imagen"
-            accept="image/*"
-            onChange={handleChange}
-            required
-          />
+    <Box component="form" onSubmit={handleSubmit}>
+      <Typography variant="h5" gutterBottom textAlign="center">
+        Agregar Libro
+      </Typography>
 
-          <div className="add-book-buttons">
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={() => navigate("/manage-books")}
-            >
-              Volver
-            </button>
-            <button type="submit" className="btn-primary">
-              Guardar 
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      <Stack spacing={2}>
+        <TextField label="Título" name="titulo" required fullWidth onChange={handleChange} />
+        <TextField label="Autor" name="autor" required fullWidth onChange={handleChange} />
+        <TextField
+          label="Descripción"
+          name="descripcion"
+          required
+          multiline
+          rows={3}
+          fullWidth
+          onChange={handleChange}
+        />
+        <TextField label="Precio (COP)" name="precio" type="number" required fullWidth onChange={handleChange} />
+        <TextField label="Stock" name="stock" type="number" required fullWidth onChange={handleChange} />
+        <Button variant="outlined" component="label">
+          Subir Imagen
+          <input type="file" name="imagen" hidden accept="image/*" onChange={handleChange} />
+        </Button>
+
+        <Button type="submit" variant="contained" sx={{ backgroundColor: "#6d4c41" }}>
+          Guardar
+        </Button>
+        <Button variant="outlined" onClick={onClose}>Volver</Button>
+      </Stack>
+    </Box>
   );
 };
 

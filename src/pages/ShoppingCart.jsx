@@ -3,7 +3,7 @@ import { useCart } from "../context/CartContext";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
 import "../styles/ShoppingCart.css";
 
-const ShoppingCart = () => {
+const ShoppingCart = ({ onClose }) => {
   const { cartItems, removeFromCart, clearCart } = useCart();
 
   return (
@@ -28,7 +28,9 @@ const ShoppingCart = () => {
                     <small>{book.year || "Año desconocido"}</small>
                   </p>
                 </div>
-                <button onClick={() => removeFromCart(index)}>Eliminar</button>
+                <button onClick={() => removeFromCart(index)} className="cart-action-button">
+                Eliminar
+              </button>
               </li>
             ))}
           </ul>
@@ -46,6 +48,9 @@ const ShoppingCart = () => {
           >
             Comprar
           </button>
+          {onClose && (
+            <button className="modal-return-button" onClick={onClose}>Volver</button>
+          )}
         </>
       )}
     </div>
