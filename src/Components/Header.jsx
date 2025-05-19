@@ -4,7 +4,7 @@
   import { FaShoppingCart } from "react-icons/fa";
   import { useCart } from "../context/CartContext";
 
-    const Header = ({ searchTerm, onSearchChange, onOpenCart }) => {
+    const Header = ({ searchTerm, onSearchChange, onOpenCart, isAdmin }) => {
     const navigate = useNavigate();
     const { cartCount } = useCart();
 
@@ -25,31 +25,36 @@
           <h1 className="header_WorkSpace_title">Entre Páginas</h1>
         </div>
 
-        <div className="header_center">
-          <form onSubmit={handleSearch} className="search_form_header">
-            <input
-              type="text"
-              placeholder="Buscar libros..."
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="search_input_header"
-            />
-            <button type="submit" className="search_btn_header">
-              Buscar
-            </button>
-          </form>
-        </div>
+        {!isAdmin && (
+          <div className="header_center">
+            <form onSubmit={(e) => e.preventDefault()} className="search_form_header">
+              <input
+                type="text"
+                placeholder="Buscar libros..."
+                value={searchTerm}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="search_input_header"
+              />
+              <button type="submit" className="search_btn_header">
+                Buscar
+              </button>
+            </form>
+          </div>
+        )}
 
         <div className="header_right">
-          <button onClick={onOpenCart} className="cart-icon-button">
-          <FaShoppingCart size={35} />
-          {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
-        </button>
+          {!isAdmin && (
+            <button onClick={onOpenCart} className="cart-icon-button">
+              <FaShoppingCart size={35} />
+              {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+            </button>
+          )}
           <button className="logout_btn_WorkSpace" onClick={handleLogout}>
             Cerrar sesión
           </button>
         </div>
       </header>
+
     );
   };
 

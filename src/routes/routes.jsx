@@ -11,6 +11,7 @@ import ProfileEdit from "../pages/ProfileEdit";
 import AllBooks from "../pages/AllBooks";
 import ManageBooks from "../pages/ManageBooks";
 import ShoppingCart from "../pages/ShoppingCart";
+import AdminUsers from "../../Admin/AdminUsers";
 
 const RoutesComponent = () => {
   return (
@@ -26,6 +27,7 @@ const RoutesComponent = () => {
       <Route path="/all-books" element={<AllBooks />} />
       <Route path="/shopping-cart" element={<ShoppingCart />} />
       <Route path="/add-book" element={<AddBook />} />
+      <Route path="/admin-users" element={<AdminUsers />} />
     </Routes>
   );
 };
