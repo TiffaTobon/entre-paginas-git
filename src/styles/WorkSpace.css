@@ -35,10 +35,18 @@
     margin-bottom: 15px;
   }
   
+  .workspace-title {
+    text-align: center;
+    color: #5D4037; 
+    font-size: 28px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
     /* Footer */
     .footer_Workspace {
       background-color: #F4E1C1;
-      color: white;
+      color: #5D4037;
       text-align: center;
       padding: 15px;
       border-top: 1px solid #ccc;

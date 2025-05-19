@@ -1,116 +1,99 @@
-import React, { useState } from "react";
-import { getAuth } from "firebase/auth";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../Firebase";
-import { useNavigate } from "react-router-dom";
-import "../styles/AddBook.css";
+import React, { useState, useEffect } from "react";
+import {
+  TextField,
+  Button,
+  Typography,
+  Stack,
+  Box,
+} from "@mui/material";
+import axios from "axios";
 
-const AddBook = () => {
+const AddBook = ({ onClose, onSuccess }) => {
+  const [usuarioId, setUsuarioId] = useState(null);
   const [formData, setFormData] = useState({
     titulo: "",
-    autor: "",
     descripcion: "",
-    categoria: "",
-    imagen: "",
+    autor: "",
+    precio: "",
+    stock: "",
+    imagen: null,
   });
 
-  const auth = getAuth();
-  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setUsuarioId(payload.id);
+    }
+  }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (e.target.name === "imagen") {
+      setFormData({ ...formData, imagen: e.target.files[0] });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!usuarioId) return alert("Usuario no autenticado");
+
+    const data = new FormData();
+    for (const key in formData) {
+      data.append(key, formData[key]);
+    }
+    data.append("usuario_id", usuarioId);
 
     try {
-      const user = auth.currentUser;
-      if (!user) {
-        alert("Debes estar logueado para agregar un libro.");
-        return;
-      }
-
-      await addDoc(collection(db, "books"), {
-        ...formData,
-        usuarioId: user.uid,
-        fechaCreacion: serverTimestamp(),
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:3000/libros", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      alert("¡Libro agregado con éxito!");
-      setFormData({ titulo: "", autor: "", descripcion: "", categoria: "" });
-      navigate("/workspace");
+      alert("Libro agregado correctamente");
+      if (onSuccess) onSuccess(); // recarga libros
+      if (onClose) onClose(); // cierra modal
     } catch (error) {
       console.error("Error al agregar libro:", error);
-      alert("Ocurrió un error al agregar el libro.");
+      alert("Error al agregar el libro");
     }
   };
 
   return (
-    <div className="add-book-wrapper">
-      <div className="add-book-container">
-        <h2 className="add-book-title">Agregar Libro</h2>
-        <form onSubmit={handleSubmit} className="add-book-form">
-          <input
-            type="text"
-            name="titulo"
-            placeholder="Título"
-            value={formData.titulo}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="autor"
-            placeholder="Autor"
-            value={formData.autor}
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="descripcion"
-            placeholder="Descripción"
-            value={formData.descripcion}
-            onChange={handleChange}
-            required
-          />
-          <select
-            name="categoria"
-            value={formData.categoria}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Selecciona una categoría</option>
-            <option value="Ficción">Ficción</option>
-            <option value="No ficción">No ficción</option>
-            <option value="Romance">Romance</option>
-            <option value="Suspenso">Suspenso</option>
-            <option value="Ciencia Ficción">Ciencia Ficción</option>
-            <option value="Fantasía">Fantasía</option>
-            <option value="Infantil">Infantil</option>
-            <option value="Autoayuda">Autoayuda</option>
-            <option value="Biografía">Biografía</option>
-            <option value="Historia">Historia</option>
-            <option value="Misterio">Misterio</option>
-            <option value="Educativo">Educativo</option>
-          </select>
+    <Box component="form" onSubmit={handleSubmit}>
+      <Typography variant="h5" gutterBottom textAlign="center">
+        Agregar Libro
+      </Typography>
 
-          <div className="add-book-buttons">
-            <button type="submit" className="btn-primary">
-              Guardar Libro
-            </button>
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={() => navigate("/workspace")}
-            >
-              Regresar
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      <Stack spacing={2}>
+        <TextField label="Título" name="titulo" required fullWidth onChange={handleChange} />
+        <TextField label="Autor" name="autor" required fullWidth onChange={handleChange} />
+        <TextField
+          label="Descripción"
+          name="descripcion"
+          required
+          multiline
+          rows={3}
+          fullWidth
+          onChange={handleChange}
+        />
+        <TextField label="Precio (COP)" name="precio" type="number" required fullWidth onChange={handleChange} />
+        <TextField label="Stock" name="stock" type="number" required fullWidth onChange={handleChange} />
+        <Button variant="outlined" component="label">
+          Subir Imagen
+          <input type="file" name="imagen" hidden accept="image/*" onChange={handleChange} />
+        </Button>
+
+        <Button type="submit" variant="contained" sx={{ backgroundColor: "#6d4c41" }}>
+          Guardar
+        </Button>
+        <Button variant="outlined" onClick={onClose}>Volver</Button>
+      </Stack>
+    </Box>
   );
 };
 

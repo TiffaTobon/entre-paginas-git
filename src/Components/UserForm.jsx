@@ -1,199 +1,162 @@
 import React, { useState } from "react";
+import {
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  Box,
+  Stack,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import "../styles/UserForm.css"; 
 
-const UserForm = ({ initialValues = {}, onSubmit, mode = "register" }) => {
+const UserForm = ({ onSubmit, onClose }) => {
   const navigate = useNavigate();
 
-  // Inicializa los estados usando los valores iniciales (si existen) o valores vacíos
-  const [email, setEmail] = useState(initialValues.email || "");
-  const [password, setPassword] = useState(initialValues.password || "");
-  const [nombres, setNombres] = useState(initialValues.nombres || "");
-  const [apellidos, setApellidos] = useState(initialValues.apellidos || "");
-  const [fechaNacimiento, setFechaNacimiento] = useState(
-    initialValues.fechaNacimiento || ""
-  );
-  const [genero, setGenero] = useState(initialValues.genero || "");
-  const [celular, setCelular] = useState(initialValues.celular || "");
-  const [direccion, setDireccion] = useState(initialValues.direccion || "");
-  const [aceptoTerminos, setAceptoTerminos] = useState(
-    initialValues.aceptoTerminos || false
-  );
+  const [formData, setFormData] = useState({
+    nombres: "",
+    apellidos: "",
+    email: "",
+    password: "",
+    confirmarPassword: "",
+    aceptoTerminos: false,
+  });
 
   const [errores, setErrores] = useState({});
 
-  // Función de validación
-  const validarFormulario = () => {
-    let erroresTemp = {};
-
-    if (nombres.length < 3)
-      erroresTemp.nombres = "Debe tener al menos 3 letras";
-    if (apellidos.length < 3)
-      erroresTemp.apellidos = "Debe tener al menos 3 letras";
-    if (!/^\d{10}$/.test(celular))
-      erroresTemp.celular = "Debe tener 10 números";
-    if (!/^\d{4}\/\d{2}\/\d{2}$/.test(fechaNacimiento))
-      erroresTemp.fechaNacimiento = "Formato yyyy/mm/dd";
-    if (!email.includes("@")) erroresTemp.email = "Correo no válido";
-    // Solo validamos contraseña y términos en modo "register"
-    if (mode === "register") {
-      if (password.length < 6)
-        erroresTemp.password = "Debe tener al menos 6 caracteres";
-      if (!aceptoTerminos)
-        erroresTemp.aceptoTerminos = "Debes aceptar los términos";
-    }
-
-    setErrores(erroresTemp);
-    return Object.keys(erroresTemp).length === 0;
+  const handleChange = (e) => {
+    const { name, type, value, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
 
-  // Función para manejar el envío del formulario
+  const validar = () => {
+    const newErrors = {};
+    if (formData.nombres.length < 2) newErrors.nombres = "Nombre inválido";
+    if (formData.apellidos.length < 2) newErrors.apellidos = "Apellido inválido";
+    if (!formData.email.includes("@")) newErrors.email = "Email inválido";
+    if (formData.password.length < 6) newErrors.password = "Mínimo 6 caracteres";
+    if (formData.password !== formData.confirmarPassword)
+      newErrors.confirmarPassword = "Las contraseñas no coinciden";
+    if (!formData.aceptoTerminos)
+      newErrors.aceptoTerminos = "Debes aceptar los términos";
+
+    setErrores(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validarFormulario()) {
-      // Se envían todos los datos hacia el padre
-      onSubmit({
-        email,
-        password,
-        nombres,
-        apellidos,
-        fechaNacimiento,
-        genero,
-        celular,
-        direccion,
-        aceptoTerminos,
-      });
+    if (validar()) {
+      const { confirmarPassword, ...data } = formData;
+      onSubmit(data);
     }
-  };
-
-  // Función para limpiar campos
-  const limpiarCampos = () => {
-    setEmail("");
-    setPassword("");
-    setNombres("");
-    setApellidos("");
-    setFechaNacimiento("");
-    setGenero("");
-    setCelular("");
-    setDireccion("");
-    setAceptoTerminos(false);
-    setErrores({});
   };
 
   return (
-    <div className="registro-container">
-      <h2>{mode === "register" ? "Registro" : "Editar Perfil"}</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Nombres */}
-        <label>Nombres:</label>
-        <input
-          type="text"
-          value={nombres}
-          onChange={(e) => setNombres(e.target.value)}
-        />
-        {errores.nombres && <p className="error">{errores.nombres}</p>}
+    <Box component="form" onSubmit={handleSubmit}>
+      <Typography variant="h5" gutterBottom textAlign="center">
+        Registro
+      </Typography>
 
-        {/* Apellidos */}
-        <label>Apellidos:</label>
-        <input
-          type="text"
-          value={apellidos}
-          onChange={(e) => setApellidos(e.target.value)}
+      <Stack spacing={2}>
+        <TextField
+          label="Nombres"
+          name="nombres"
+          value={formData.nombres}
+          onChange={handleChange}
+          error={!!errores.nombres}
+          helperText={errores.nombres}
+          fullWidth
+          InputProps={{ sx: { backgroundColor: "white" } }}
         />
-        {errores.apellidos && <p className="error">{errores.apellidos}</p>}
 
-        {/* Email */}
-        <label>Email:</label>
-        <input
+        <TextField
+          label="Apellidos"
+          name="apellidos"
+          value={formData.apellidos}
+          onChange={handleChange}
+          error={!!errores.apellidos}
+          helperText={errores.apellidos}
+          fullWidth
+          InputProps={{ sx: { backgroundColor: "white" } }}
+        />
+
+        <TextField
+          label="Email"
+          name="email"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={handleChange}
+          error={!!errores.email}
+          helperText={errores.email}
+          fullWidth
+          InputProps={{ sx: { backgroundColor: "white" } }}
         />
-        {errores.email && <p className="error">{errores.email}</p>}
 
-        {/* Contraseña solo en registro */}
-        {mode === "register" && (
-          <>
-            <label>Contraseña:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+        <TextField
+          label="Contraseña"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          error={!!errores.password}
+          helperText={errores.password}
+          fullWidth
+          InputProps={{ sx: { backgroundColor: "white" } }}
+        />
+
+        <TextField
+          label="Confirmar Contraseña"
+          name="confirmarPassword"
+          type="password"
+          value={formData.confirmarPassword}
+          onChange={handleChange}
+          error={!!errores.confirmarPassword}
+          helperText={errores.confirmarPassword}
+          fullWidth
+          InputProps={{ sx: { backgroundColor: "white" } }}
+        />
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="aceptoTerminos"
+              checked={formData.aceptoTerminos}
+              onChange={handleChange}
+              color="primary"
             />
-            {errores.password && <p className="error">{errores.password}</p>}
-          </>
-        )}
-
-        {/* Fecha de Nacimiento */}
-        <label>Fecha de Nacimiento (YYYY/MM/DD):</label>
-        <input
-          type="text"
-          value={fechaNacimiento}
-          onChange={(e) => setFechaNacimiento(e.target.value)}
-        />
-        {errores.fechaNacimiento && (
-          <p className="error">{errores.fechaNacimiento}</p>
-        )}
-
-        {/* Género */}
-        <label>Género:</label>
-        <select value={genero} onChange={(e) => setGenero(e.target.value)}>
-          <option value="">Selecciona</option>
-          <option value="femenino">Femenino</option>
-          <option value="masculino">Masculino</option>
-        </select>
-
-        {/* Celular */}
-        <label>Celular:</label>
-        <input
-          type="text"
-          value={celular}
-          onChange={(e) => setCelular(e.target.value)}
-        />
-        {errores.celular && <p className="error">{errores.celular}</p>}
-
-        {/* Dirección */}
-        <label>Dirección:</label>
-        <input
-          type="text"
-          value={direccion}
-          onChange={(e) => setDireccion(e.target.value)}
+          }
+          label="Acepto los términos y condiciones"
         />
 
-        {/* Aceptar términos solo en registro */}
-        {mode === "register" && (
-          <>
-            <label className="checkbox-container">
-              <input
-                type="checkbox"
-                checked={aceptoTerminos}
-                onChange={(e) => setAceptoTerminos(e.target.checked)}
-              />
-              Acepto los términos y condiciones
-            </label>
-            {errores.aceptoTerminos && (
-              <p className="error">{errores.aceptoTerminos}</p>
-            )}
-          </>
+        {errores.aceptoTerminos && (
+          <Typography variant="caption" color="error">
+            {errores.aceptoTerminos}
+          </Typography>
         )}
 
-        {/* Botones */}
-        <div className="button-container">
-          <button type="submit" className="btn-submit">
-            {mode === "register" ? "Registrar" : "Guardar cambios"}
-          </button>
-          <button type="button" className="limpiar" onClick={limpiarCampos}>
-            Limpiar Campos
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate(mode === "edit" ? "/workspace" : "/")}
-          >
-            ← Volver
-          </button>
-        </div>
-      </form>
-    </div>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ backgroundColor: "#6d4c41", '&:hover': { backgroundColor: "#5a3c33" } }}
+        >
+          Registrar
+        </Button>
+
+        <Button
+        variant="outlined"
+        onClick={() => {
+          if (onClose) onClose(); // Cierra el modal si se pasó la prop
+          navigate("/");
+        }}
+      >
+        Volver al Inicio
+      </Button>
+      </Stack>
+    </Box>
   );
 };
 

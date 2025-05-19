@@ -21,28 +21,57 @@
 }
 
 .bookcards-item {
-  position: relative;
-  flex: 0 1 calc(25% - 40px); /* 4 tarjetas por fila con margen */
-  box-sizing: border-box;
-  margin: 10px;
+  flex: 0 1 calc(30% - 40px);
+  max-width: 360px;
   padding: 10px;
-  border: 1px solid #ddd;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  background-color: #f5efe6;
   border-radius: 8px;
-  text-align: center;
-  background-color: #F4E1C1;
   transition: transform 0.3s ease;
+  margin: 10px;
+  font-size: 15px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .bookcards-item:hover {
   transform: scale(1.05);
 }
 
+.bookcards-item h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 8px 0 4px;
+  text-align: center;
+}
+
+.bookcards-item p {
+  font-size: 18px;
+  margin: 2px 0;
+}
+
 .bookcards-image {
-  width: 100%;
-  height: auto;
-  border-radius: 6px;
-  margin-bottom: 10px;
+  height: 260px; /* antes 220px */
+  width: auto;
   object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  margin: 0 auto;
+}
+
+.precio {
+  font-size: 16px;
+  font-weight: bold;
+  color: #5D4037;
+  margin-top: 6px;
+}
+
+.stock {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 8px;
 }
 
 .pagination-buttons {
@@ -77,11 +106,11 @@
 .buy-button {
   display: none;
   background-color: #5D4037;
-  padding: 12px 12px;
+  padding: 10px 10px;
   border-radius: 12px;
   color: white;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   transition: background-color 0.3s ease, transform 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 10px auto 0 auto; /* centrado horizontal y margen arriba */
