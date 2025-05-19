@@ -3,13 +3,12 @@ import React, { useState } from "react";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 import BookCards from "../Components/BookCards";
-import UserBooks from "../Components/UserBooks";
 import "../styles/WorkSpace.css";
 import "../styles/Header.css";
 
 const WorkSpace = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   return (
     <>
@@ -18,16 +17,14 @@ const WorkSpace = () => {
         <Sidebar />
         <div className="workspace_content_wrapper">
           <div className="workspace_content">
-            <h2>Libros Destacados</h2>
+            <h2 className="workspace-title">Libros Destacados</h2>
             <BookCards searchTerm={searchTerm} limit={8} showPagination={false} />
 
             <div style={{ textAlign: "center", marginTop: "15px" }}>
-              <button className="btn-primary" onClick={() => navigate("/all-books")}>
+              <button className="btn-secondary" onClick={() => navigate("/all-books")}>
                 Ver todos los libros
               </button>
             </div>
-
-            <UserBooks />
           </div>
 
           <footer className="footer_Workspace">
@@ -40,4 +37,5 @@ const WorkSpace = () => {
     </>
   );
 };
+
 export default WorkSpace;

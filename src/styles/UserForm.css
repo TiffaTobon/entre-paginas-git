@@ -105,7 +105,7 @@ body {
 
 /* Botón principal: café */
 .btn-primary {
-    display: inline-block;
+  display: inline-block;
   padding: 12px 20px;
   background-color: #5D4037;
   color: #F4E1C1 !important;

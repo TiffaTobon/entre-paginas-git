@@ -1,4 +1,4 @@
-/* Reset básico */
+/* ===== Reset básico ===== */
 *,
 *::before,
 *::after {
@@ -7,7 +7,10 @@
   padding: 0;
 }
 
-.button_link {
+/* ===== Botones reutilizables ===== */
+.button_link,
+.button_card,
+.send-button {
   display: inline-block;
   padding: 12px 20px;
   background-color: #5D4037;
@@ -17,25 +20,75 @@
   border-radius: 6px;
   transition: background-color 0.3s ease, transform 0.2s ease;
   border: 2px solid transparent;
-  font-size: 16px;
   text-align: center;
+}
+
+.button_link {
+  font-size: 16px;
   margin-left: 12px;
 }
 
-.button_link:hover {
+.button_card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  width: 120px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.button_link:hover,
+.button_card:hover {
   background-color: #8D6E63;
   border-color: #F4E1C1;
   transform: scale(1.05);
 }
+
+.send-button {
+  padding: 10px 14px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+}
+
+.send-button:hover {
+  background-color: #C6A880;
+}
+
+/* ===== Botón pequeño ===== */
+.small_button {
+  width: 110px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+/* ===== Contenedor principal ===== */
 .main_container {
-  background-color: white; /* Fondo blanco */
+  background-color: white;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
-/* Estilos del encabezado */
+.bookcards-item {
+  flex: 0 1 calc(30% - 40px);
+  max-width: 360px;
+  padding: 10px;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  background-color: #f5efe6;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  margin: 10px;
+  font-size: 15px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+/* ===== Header ===== */
 .header_MainPanel_bar {
   display: flex;
   align-items: center;
@@ -72,6 +125,7 @@
   color: #5D4037;
 }
 
+/* ===== Banner principal ===== */
 .main_banner {
   width: 100%;
   max-height: 280px;
@@ -81,30 +135,31 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.expert_options {
+/* ===== Secciones laterales ===== */
+.expert_options,
+.side_links,
+.vertical_links {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alinea los elementos al lado izquierdo */
-  margin-left: 0px; /* Ajusta el espacio desde el borde izquierdo */
-  gap: 10px; 
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .side_links {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Alinea los links a la izquierda */
   gap: 15px;
   padding: 20px;
   position: absolute;
-  left: 50px; /* Ajusta según necesidad */
+  left: 50px;
   top: 50%;
   transform: translateY(-50%);
 }
+
+/* ===== Contenido principal ===== */
 .content_wrapper {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 50px; /* Ajusta el espacio entre los elementos */
+  gap: 50px;
   margin-top: 20px;
 }
 
@@ -113,93 +168,60 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding-left: 20px; /* Ajusta según necesidad */
+  padding-left: 20px;
 }
 
-.vertical_links {
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* Espaciado entre los links */
-}
-
-
-/* Tarjetas de opciones */
-.button_card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 10px;
-  background-color: #5D4037;
-  color: #F4E1C1;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 8px;
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  border: 2px solid transparent;
-  width: 120px;
-  font-size: 13px;
-}
-
-.button_card:hover {
-  background-color: #8D6E63;
-  transform: scale(1.05);
-  border-color: #F4E1C1;
-}
-
-.small_button {
-  width: 110px;
-  padding: 10px;
-  font-size: 12px;
-}
-
-/* Panel principal */
-.panel_content h2 {
-  text-align: center;
-  font-size: 2.4rem;
-  color: #5D4037;
-  margin-bottom: 30px;
-  font-weight: bold;
-}
+/* ===== Panel principal - títulos ===== */
+.panel_content h2,
 .highlighted_title {
   text-align: center;
   font-size: 2.4rem;
   color: #5D4037;
-  margin: 40px 0 20px;
   font-weight: bold;
+}
+
+.highlighted_title {
+  margin: 40px 0 20px;
   font-family: 'Outfit', sans-serif;
 }
 
-/* Sección Sobre Nosotros */
+.panel_content h2 {
+margin-bottom: 30px;
+}
+
+/* ===== Sección "Sobre Nosotros" ===== */
 .about {
   display: flex;
   align-items: center;
   justify-content: center;
-  background:#F4E1C1;
+  background: #F4E1C1;
   padding: 30px;
-  margin: 20px;
+  margin: 20px auto;
   border-radius: 10px;
   color: #5D4037;
   text-align: center;
   max-width: 2000px;
-  max-height: 500 px;
-  margin-left: auto;
-  margin-right: auto;
+  max-height: 500px;
 }
 
 .about_title {
-  text-align: center;
-  font-weight: bold;
+  font-size: 2rem; 
+  font-weight: 700; 
+  margin-bottom: 12px; 
+  color: #4E342E; 
+  font-family: 'Outfit', sans-serif;
 }
 
 .about_description {
-  max-width: 1000px;
-  font-size: 1.4rem;
-  font-weight: 100;
+  font-size: 1.2rem; 
+  font-weight: 400; 
+  color: #5D4037; 
+  line-height: 1.6; 
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-/* Footer */
+/* ===== Footer ===== */
 .footer_MainPanel {
   text-align: center;
   padding: 10px;
@@ -208,6 +230,7 @@
   color: #5D4037;
   width: 100%;
 }
+
 .centered_options {
   text-align: center;
 }
@@ -217,17 +240,16 @@
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
-  margin-top: 20px; /* Ajusta según necesidad */
-  }
-  
+  margin-top: 20px;
+}
 
-/* Botón flotante para abrir el chat */
+/* ===== Botón flotante para chat ===== */
 .open-sidebar-button {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #5D4037; /* color tierra */
-  color: #F4E1C1; /* color claro */
+  background-color: #5D4037;
+  color: #F4E1C1;
   padding: 10px 20px;
   border: none;
   border-radius: 50%;
@@ -243,15 +265,15 @@
   transform: scale(1.05);
 }
 
-/* Estilos de la barra lateral del chat */
+/* ===== Sidebar del chat ===== */
 .sidebar-chat {
   position: fixed;
   top: 0;
   right: 0;
   width: 300px;
   height: 100%;
-  background-color: #F4E1C1; /* fondo claro */
-  color: #5D4037; /* texto oscuro */
+  background-color: #F4E1C1;
+  color: #5D4037;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
   z-index: 999;
   display: flex;
@@ -259,7 +281,6 @@
   font-family: 'Outfit', sans-serif;
 }
 
-/* Encabezado del chat */
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -269,20 +290,23 @@
   border-bottom: 1px solid #D7B89C;
 }
 
-/* Cuerpo del chat */
 .sidebar-body {
   padding: 12px;
   flex-grow: 1;
   overflow-y: auto;
 }
 
-/* Campo de entrada del chat */
+.chat-input-container {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
 .chat-input {
   width: 100%;
   padding: 10px;
   border-radius: 5px;
   border: none;
-  margin-top: 20px;
   background-color: #fff;
   color: #5D4037;
   font-family: 'Outfit', sans-serif;
@@ -292,27 +316,6 @@
   color: #A1887F;
 }
 
-/* Botón de cerrar */
-button {
-  background: none;
-  border: none;
-  color: #5D4037;
-  font-size: 20px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-button:hover {
-  transform: scale(1.1);
-}
-/* Contenedor del input y botón de enviar */
-.chat-input-container {
-  display: flex;
-  gap: 8px;
-  margin-top: 20px;
-}
-
-/* Mensajes enviados */
 .chat-messages {
   max-height: 300px;
   overflow-y: auto;
@@ -329,18 +332,16 @@ button:hover {
   font-size: 14px;
 }
 
-/* Botón de enviar */
-.send-button {
-  padding: 10px 14px;
-  background-color: #D7B89C;
-  color: #5D4037;
+/* Botón genérico */
+button {
+  background: none;
   border: none;
-  border-radius: 5px;
+  color: #5D4037;
+  font-size: 20px;
   cursor: pointer;
-  font-family: 'Outfit', sans-serif;
-  transition: background-color 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
-.send-button:hover {
-  background-color: #C6A880;
+button:hover {
+  transform: scale(1.1);
 }

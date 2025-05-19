@@ -3,78 +3,70 @@ import "../styles/BookCards.css";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import { useNavigate } from "react-router-dom";
 
 const BookCards = ({ searchTerm, limit, showPagination = true }) => {
   const { addToCart } = useCart();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const navigate = useNavigate(); // Usar navigate para redirigir
-  const isLoggedIn = !!localStorage.getItem("token"); // Detectar si está logueado
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBooks = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `https://openlibrary.org/search.json?title=${searchTerm || "harry"}&page=${page}`
-        );
-        const data = await response.json();
-        setBooks(data.docs.slice(0, 20));
+        const res = await fetch("http://localhost:3000/libros");
+        const data = await res.json();
+        const allBooks = data.datos || [];
+
+        const filtered = searchTerm
+          ? allBooks.filter((book) =>
+              book.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+          : allBooks;
+
+        setBooks(limit ? filtered.slice(0, limit) : filtered);
       } catch (error) {
-        console.error("Error al obtener libros:", error);
+        console.error("Error al cargar libros desde backend:", error);
       }
       setLoading(false);
     };
 
     fetchBooks();
-  }, [searchTerm, page]);
-
-  const handleNext = () => setPage((prev) => prev + 1);
-  const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
-  const librosAMostrar = limit ? books.slice(0, limit) : books;
+  }, [searchTerm, limit]);
 
   if (loading) return <p>Cargando libros...</p>;
 
   return (
     <>
       <ul className="bookcards-list">
-        {librosAMostrar.map((book, index) => (
+        {books.map((book, index) => (
           <li key={index} className="bookcards-item">
             <img
               src={
-                book.cover_i
-                  ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
+                book.imagen
+                  ? `http://localhost:3000/uploads/${book.imagen}`
                   : placeholderImage
               }
-              alt={book.title}
+              alt={book.titulo}
               className="bookcards-image"
             />
-            <h4>{book.title}</h4>
-            <p>{book.author_name?.join(", ")}</p>
-            <p><small>{book.first_publish_year || "Año desconocido"}</small></p>
+            <h4>{book.titulo}</h4>
+            <p>{book.autor}</p>
+            <p className="precio">${book.precio}</p>
+            <p className="stock">Stock: {book.stock}</p>
             <button
               onClick={() => {
-                console.log("Botón clickeado");
-
                 const token = localStorage.getItem("token");
-                console.log("Token:", token);
-
-                if (!token) {
-                  console.log("No hay token, navegando al login");
-                  navigate("/login");
-                  return;
-                }
-
-                console.log("Token válido, añadiendo al carrito");
+                if (!token) return navigate("/login");
 
                 addToCart({
-                  title: book.title,
-                  author: book.author_name,
-                  year: book.first_publish_year,
-                  image: book.cover_i
-                    ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
+                  id: book.id,
+                  title: book.titulo,
+                  author: book.autor,
+                  price: book.precio,
+                  image: book.imagen
+                    ? `http://localhost:3000/uploads/${book.imagen}`
                     : placeholderImage,
                 });
               }}
@@ -83,24 +75,9 @@ const BookCards = ({ searchTerm, limit, showPagination = true }) => {
               <FaShoppingCart style={{ marginRight: "6px" }} />
               Añadir al carrito
             </button>
-
-
-
-
           </li>
         ))}
       </ul>
-
-      {showPagination && (
-        <div className="pagination-buttons">
-          <button onClick={handlePrev} disabled={page === 1} className="pagination-button">
-            Anterior
-          </button>
-          <button onClick={handleNext} className="pagination-button">
-            Siguiente
-          </button>
-        </div>
-      )}
     </>
   );
 };

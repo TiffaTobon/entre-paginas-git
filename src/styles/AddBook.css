@@ -8,15 +8,13 @@
   --gris-claro: #e0e0e0;
 }
 
-/* === Fondo general === */
+/* Fondo general */
 body {
   background-color: var(--fondo-claro);
-  font-family: 'Tailand', sans-serif;
   margin: 0;
   padding: 0;
   height: 100vh;
 }
-
 /* === Contenedor general === */
 .add-book-wrapper {
   display: flex;
@@ -29,6 +27,7 @@ body {
 
 /* === Caja del formulario === */
 .add-book-container {
+  
   background: white;
   padding: 30px;
   border-radius: 12px;
@@ -67,6 +66,7 @@ body {
   font-size: 14px;
   background-color: #fff;
   color: var(--marron);
+  font-family: 'Tailand', sans-serif;
 }
 
 .add-book-form textarea {
@@ -77,14 +77,14 @@ body {
 /* === Botones contenedor === */
 .add-book-buttons {
   display: flex;
-  justify-content: space-between; /* ← esto pone uno a la izquierda y otro a la derecha */
+  justify-content: space-between; 
   gap: 10px;
   margin-top: 10px;
 }
 
 /* === Botón principal (Guardar) === */
 .btn-primary {
-   display: inline-block;
+  display: inline-block;
   padding: 12px 20px;
   background-color: #5D4037;
   color: #F4E1C1 !important;
@@ -99,17 +99,16 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: #8D6E63;
-  border-color: #F4E1C1;
-  transform: scale(1.05);
+  background-color: var(--marron-oscuro);
 }
 
 /* === Botón secundario (Cancelar) === */
 .btn-secondary {
   background-color: var(--gris-claro) !important;
   color: var(--marron) !important;
+  color:#4E342E;
+  border:none !important;
 }
-
 
 .btn-secondary:hover {
   background-color: #d3d3d3 !important;
