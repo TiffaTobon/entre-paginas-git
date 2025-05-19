@@ -1,49 +1,72 @@
-import React, { useState } from "react";
+// src/pages/AddBook.jsx
+import React, { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../Firebase";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/AddBook.css";
 
 const AddBook = () => {
+  const navigate = useNavigate();
+  const [usuarioId, setUsuarioId] = useState(null);
   const [formData, setFormData] = useState({
     titulo: "",
-    autor: "",
     descripcion: "",
-    categoria: "",
-    imagen: "",
+    autor: "",
+    precio: "",
+    stock: "",
+    imagen: null,
   });
 
-  const auth = getAuth();
-  const navigate = useNavigate();
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        setUsuarioId(payload.id); //  ID base de datos
+      } 
+    }
+  }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (e.target.name === "imagen") {
+      setFormData({ ...formData, imagen: e.target.files[0] });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!usuarioId) {
+      alert("Usuario no autenticado");
+      return;
+    }
+
+    const data = new FormData();
+    data.append("titulo", formData.titulo);
+    data.append("descripcion", formData.descripcion);
+    data.append("autor", formData.autor);
+    data.append("precio", formData.precio);
+    data.append("stock", formData.stock);
+    data.append("usuario_id", usuarioId);
+    data.append("imagen", formData.imagen);
+
+    const token = localStorage.getItem("token");
 
     try {
-      const user = auth.currentUser;
-      if (!user) {
-        alert("Debes estar logueado para agregar un libro.");
-        return;
-      }
-
-      await addDoc(collection(db, "books"), {
-        ...formData,
-        usuarioId: user.uid,
-        fechaCreacion: serverTimestamp(),
+      await axios.post("http://localhost:3000/libros", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
-
-      alert("¡Libro agregado con éxito!");
-      setFormData({ titulo: "", autor: "", descripcion: "", categoria: "" });
-      navigate("/workspace");
+      alert("Libro agregado correctamente");
+      navigate("/manage-books");
     } catch (error) {
       console.error("Error al agregar libro:", error);
-      alert("Ocurrió un error al agregar el libro.");
+      alert("Error al agregar el libro");
     }
   };
 
@@ -56,7 +79,6 @@ const AddBook = () => {
             type="text"
             name="titulo"
             placeholder="Título"
-            value={formData.titulo}
             onChange={handleChange}
             required
           />
@@ -64,48 +86,50 @@ const AddBook = () => {
             type="text"
             name="autor"
             placeholder="Autor"
-            value={formData.autor}
             onChange={handleChange}
             required
           />
           <textarea
             name="descripcion"
             placeholder="Descripción"
-            value={formData.descripcion}
             onChange={handleChange}
             required
           />
-          <select
-            name="categoria"
-            value={formData.categoria}
+          <input
+            type="number"
+            name="precio"
+            placeholder="Precio (COP)"
             onChange={handleChange}
             required
-          >
-            <option value="">Selecciona una categoría</option>
-            <option value="Ficción">Ficción</option>
-            <option value="No ficción">No ficción</option>
-            <option value="Romance">Romance</option>
-            <option value="Suspenso">Suspenso</option>
-            <option value="Ciencia Ficción">Ciencia Ficción</option>
-            <option value="Fantasía">Fantasía</option>
-            <option value="Infantil">Infantil</option>
-            <option value="Autoayuda">Autoayuda</option>
-            <option value="Biografía">Biografía</option>
-            <option value="Historia">Historia</option>
-            <option value="Misterio">Misterio</option>
-            <option value="Educativo">Educativo</option>
-          </select>
+          />
+          <input
+            type="number"
+            name="stock"
+            placeholder="Cantidad en stock"
+            onChange={handleChange}
+            required
+          />
+          <label htmlFor="imagen" style={{ color: "#5D4037", fontWeight: "bold" }}>
+            Imagen del libro (jpg, png)
+          </label>
+          <input
+            type="file"
+            name="imagen"
+            accept="image/*"
+            onChange={handleChange}
+            required
+          />
 
           <div className="add-book-buttons">
-            <button type="submit" className="btn-primary">
-              Guardar Libro
-            </button>
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => navigate("/workspace")}
+              onClick={() => navigate("/manage-books")}
             >
-              Regresar
+              Volver
+            </button>
+            <button type="submit" className="btn-primary">
+              Guardar 
             </button>
           </div>
         </form>

@@ -1,25 +1,24 @@
 import React, { useState } from "react";
-// Ejemplo usando el ícono FaSearch
 import { FaSearch } from "react-icons/fa";
+import "../styles/SearchBar.css"; // Asegúrate de importar el CSS
 
 function SearchBar() {
   const [search, setSearch] = useState("");
 
   const handleSearch = () => {
-    // Lógica para buscar lo que necesites.
     console.log("Buscando:", search);
   };
 
   return (
-    <div className="search-container">
+    <div className="searchbar-container">
       <input
         type="text"
-        className="search-bar"
-        placeholder="Buscar..."
+        className="searchbar-input"
+        placeholder="Buscar libros..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <button className="search-btn" onClick={handleSearch}>
+      <button className="searchbar-button" onClick={handleSearch}>
         <FaSearch />
       </button>
     </div>

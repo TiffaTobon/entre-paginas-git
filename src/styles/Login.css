@@ -80,22 +80,4 @@ body {
   transition: background-color 0.3s ease;
 }
 
-/* Botón principal: café */
-.btn-primary {
-  background-color: var(--marron);
-  color: white;
-}
 
-.btn-primary:hover {
-  background-color: var(--marron-oscuro);
-}
-
-/* Botón secundario: gris claro */
-.btn-secondary {
-  background-color: var(--gris-claro);
-  color: var(--marron);
-}
-
-.btn-secondary:hover {
-  background-color: #d3d3d3;
-}

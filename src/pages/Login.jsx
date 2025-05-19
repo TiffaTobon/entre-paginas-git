@@ -1,3 +1,4 @@
+// Login.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
@@ -19,8 +20,9 @@ const Login = () => {
 
       const { token, usuario } = res.data;
 
+      // Guardar token y usuario en localStorage
       localStorage.setItem("token", token);
-      localStorage.setItem("usuario_id", usuario.id);
+      localStorage.setItem("usuario_id", usuario.id); // útil para subir libros
 
       alert("Inicio de sesión exitoso");
       navigate("/workspace");
@@ -35,35 +37,38 @@ const Login = () => {
       <div className="form-container">
         <h2>Iniciar Sesión</h2>
         <form onSubmit={handleLogin}>
-          <div className="form-group">
-            <label>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-          <div className="form-group">
-            <label>Contraseña:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+          <label>Contraseña:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-          <button type="submit" className="btn-primary">
+          <button type="submit" className="btn-login">
             Ingresar
           </button>
-          <Link to="/">
-            <button type="button" className="btn-secondary">
-              Volver al Inicio
-            </button>
-          </Link>
         </form>
+        <Link to="/">
+          <button type="button" className="btn-secondary">
+          Volver al Inicio
+        </button>
+        </Link>
+        <p style={{ textAlign: "center", marginTop: "15px" }}>
+        ¿No tienes cuenta?{" "}
+        <Link to="/register" style={{ color: "#5D4037", fontWeight: "bold", textDecoration: "underline" }}>
+          Regístrate
+        </Link>
+      </p>
+
       </div>
     </div>
   );

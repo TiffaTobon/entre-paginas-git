@@ -9,7 +9,7 @@ import "../styles/Header.css";
 
 const WorkSpace = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate(); // lo agregas aquí
+  const navigate = useNavigate(); 
 
   return (
     <>

@@ -8,9 +8,11 @@ const Header = ({ searchTerm, onSearchChange }) => {
   const navigate = useNavigate();
   const { cartCount } = useCart();
 
-  const handleLogout = () => {
-    navigate("/");
-  };
+ const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("usuario_id"); // también es buena práctica
+  navigate("/");
+};
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -51,4 +53,4 @@ const Header = ({ searchTerm, onSearchChange }) => {
   );
 };
 
-export default Header; // 👈 ASEGÚRATE de tener esta línea
+export default Header; 

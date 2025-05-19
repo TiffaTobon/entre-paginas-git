@@ -18,26 +18,27 @@ const ManageBooks = () => {
   const navigate = useNavigate();
   const auth = getAuth();
 
-  useEffect(() => {
-    const fetchUserBooks = async () => {
-      const user = auth.currentUser;
-      if (!user) return;
+useEffect(() => {
+  const fetchUserBooks = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:3000/api/mis-libros", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      const q = query(
-        collection(db, "books"),
-        where("usuarioId", "==", user.uid)
-      );
-      const querySnapshot = await getDocs(q);
+      if (!response.ok) throw new Error("Error al obtener libros");
 
-      const booksList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setBooks(booksList);
-    };
+      const data = await response.json();
+      setBooks(data.datos);
+    } catch (error) {
+      console.error("Error al obtener libros:", error);
+    }
+  };
 
-    fetchUserBooks();
-  }, []);
+  fetchUserBooks();
+}, []);
 
   const handleDelete = async (id) => {
     const confirm = window.confirm("¿Estás seguro de eliminar este libro?");
@@ -78,7 +79,7 @@ const ManageBooks = () => {
 
       {books.length === 0 ? (
         <div className="empty-book-card">
-          <h3>📚 Aún no tienes libros</h3>
+          <h3> Aún no tienes libros</h3>
           <p>Haz clic en el botón para agregar tu primer libro.</p>
           <button className="btn-primary" onClick={() => navigate("/add-book")}>
             ➕ Agregar Libro

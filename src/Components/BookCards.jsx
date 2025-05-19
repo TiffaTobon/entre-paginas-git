@@ -3,12 +3,15 @@ import "../styles/BookCards.css";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
 
 const BookCards = ({ searchTerm, limit, showPagination = true }) => {
-  const { addToCart } = useCart(); // Hook dentro del componente
+  const { addToCart } = useCart();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate(); // Usar navigate para redirigir
+  const isLoggedIn = !!localStorage.getItem("token"); // Detectar si está logueado
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -30,7 +33,6 @@ const BookCards = ({ searchTerm, limit, showPagination = true }) => {
 
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
-
   const librosAMostrar = limit ? books.slice(0, limit) : books;
 
   if (loading) return <p>Cargando libros...</p>;
@@ -53,7 +55,20 @@ const BookCards = ({ searchTerm, limit, showPagination = true }) => {
             <p>{book.author_name?.join(", ")}</p>
             <p><small>{book.first_publish_year || "Año desconocido"}</small></p>
             <button
-              onClick={() =>
+              onClick={() => {
+                console.log("Botón clickeado");
+
+                const token = localStorage.getItem("token");
+                console.log("Token:", token);
+
+                if (!token) {
+                  console.log("No hay token, navegando al login");
+                  navigate("/login");
+                  return;
+                }
+
+                console.log("Token válido, añadiendo al carrito");
+
                 addToCart({
                   title: book.title,
                   author: book.author_name,
@@ -61,13 +76,17 @@ const BookCards = ({ searchTerm, limit, showPagination = true }) => {
                   image: book.cover_i
                     ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
                     : placeholderImage,
-                })
-              }
+                });
+              }}
               className="buy-button"
             >
-              <FaShoppingCart style={{ gap: "8px" }} />
+              <FaShoppingCart style={{ marginRight: "6px" }} />
               Añadir al carrito
             </button>
+
+
+
+
           </li>
         ))}
       </ul>

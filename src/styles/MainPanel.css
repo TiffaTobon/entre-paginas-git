@@ -7,32 +7,33 @@
   padding: 0;
 }
 
+.button_link {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #5D4037;
+  color: #F4E1C1;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border: 2px solid transparent;
+  font-size: 16px;
+  text-align: center;
+  margin-left: 12px;
+}
+
+.button_link:hover {
+  background-color: #8D6E63;
+  border-color: #F4E1C1;
+  transform: scale(1.05);
+}
 .main_container {
-  background-image: url("../assets/Images/fondomain2.jpg"); /* Cambia 'fondo.jpg' por el nombre de tu imagen */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: white; /* Fondo blanco */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-
 }
-
-.image_background{
-  background-image: url("../assets/Images/fondomain2.jpg"); /* Cambia 'fondo.jpg' por el nombre de tu imagen */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-
-
-
 
 /* Estilos del encabezado */
 .header_MainPanel_bar {
@@ -71,27 +72,15 @@
   color: #5D4037;
 }
 
-/* Botones estilo enlace */
-.button_link {
-  display: inline-block;
-  padding: 8px 16px;
-  background-color: #5D4037;
-  color: #F4E1C1;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 6px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  border: 2px solid transparent;
-  font-size: 14px;
-  text-align: center;
-  margin-left: 0px;
+.main_banner {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.button_link:hover {
-  background-color: #8D6E63;
-  border-color: #F4E1C1;
-  transform: scale(1.05);
-}
 .expert_options {
   display: flex;
   flex-direction: column;
@@ -119,8 +108,6 @@
   margin-top: 20px;
 }
 
-
-
 .moved_left {
   display: flex;
   flex-direction: column;
@@ -143,7 +130,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 12px;
+  padding: 10px;
   background-color: #5D4037;
   color: #F4E1C1;
   text-decoration: none;
@@ -168,11 +155,20 @@
 }
 
 /* Panel principal */
-.panel_content {
-  flex: 1;
-  background: linear-gradient(to bottom, #FAF3E0, #FFFFFF);
-  padding: 20px;
-  width: 100%;
+.panel_content h2 {
+  text-align: center;
+  font-size: 2.4rem;
+  color: #5D4037;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+.highlighted_title {
+  text-align: center;
+  font-size: 2.4rem;
+  color: #5D4037;
+  margin: 40px 0 20px;
+  font-weight: bold;
+  font-family: 'Outfit', sans-serif;
 }
 
 /* Sección Sobre Nosotros */
@@ -180,13 +176,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(225, 200, 180, 0.5);
+  background:#F4E1C1;
   padding: 30px;
   margin: 20px;
   border-radius: 10px;
   color: #5D4037;
   text-align: center;
-  max-width: 800px;
+  max-width: 2000px;
+  max-height: 500 px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -194,6 +191,12 @@
 .about_title {
   text-align: center;
   font-weight: bold;
+}
+
+.about_description {
+  max-width: 1000px;
+  font-size: 1.4rem;
+  font-weight: 100;
 }
 
 /* Footer */
@@ -217,34 +220,6 @@
   margin-top: 20px; /* Ajusta según necesidad */
   }
   
-
-.about {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(225, 200, 180, 0.5);
-  padding: 60px;
-  margin: 40px auto; /* Centra horizontalmente */
-  border-radius: 10px;
-  color: #5D4037;
-  font-size: 1.2rem;
-  text-align: center;
-  max-width: 900px; /* Define un ancho máximo para centrar mejor */
-}
-
-.about_title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.about_description {
-  text-align: center;
-  max-width: 800px;
-  font-size: 1.3rem;
-  line-height: 1.6;
-}
 
 /* Botón flotante para abrir el chat */
 .open-sidebar-button {

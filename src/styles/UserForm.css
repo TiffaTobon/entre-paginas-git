@@ -40,7 +40,6 @@ body {
   color: var(--marron);
   margin-bottom: 20px;
   text-align: center;
-  text-decoration:dotted;
 
 }
 
@@ -106,9 +105,18 @@ body {
 
 /* Botón principal: café */
 .btn-primary {
-  background-color: var(--marron);
-  color: white;
-  margin-bottom: 10px;
+    display: inline-block;
+  padding: 12px 20px;
+  background-color: #5D4037;
+  color: #F4E1C1 !important;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border: 2px solid transparent;
+  font-size: 16px;
+  text-align: center;
+  margin-left: 12px;
 }
 
 .btn-primary:hover {
@@ -119,6 +127,7 @@ body {
 .btn-secondary {
   background-color: var(--gris-claro) !important;
   color: var(--marron) !important;
+  color:#4E342E;
 }
 
 .btn-secondary:hover {

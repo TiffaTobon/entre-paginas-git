@@ -21,28 +21,43 @@
 }
 
 .bookcards-item {
-  position: relative;
-  flex: 0 1 calc(25% - 40px); /* 4 tarjetas por fila con margen */
-  box-sizing: border-box;
-  margin: 10px;
+  flex: 0 1 calc(30% - 40px);
+  max-width: 300px;
   padding: 10px;
-  border: 1px solid #ddd;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra la imagen y demás contenido */
+  background-color: #f5efe6;
   border-radius: 8px;
-  text-align: center;
-  background-color: #F4E1C1;
   transition: transform 0.3s ease;
+  margin: 10px;
+  font-size: 15px; /* Subido de 13px a 15px */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .bookcards-item:hover {
   transform: scale(1.05);
 }
 
+.bookcards-item h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 8px 0 4px;
+  text-align: center;
+}
+
+.bookcards-item p {
+  font-size: 18px;
+  margin: 2px 0;
+}
+
 .bookcards-image {
-  width: 100%;
-  height: auto;
-  border-radius: 6px;
-  margin-bottom: 10px;
+  height: 220px;
   object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  margin: 0 auto; /* Asegura centrado horizontal */
 }
 
 .pagination-buttons {
