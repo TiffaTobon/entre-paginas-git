@@ -3,13 +3,11 @@ import "../styles/BookCards.css";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
-import { useNavigate } from "react-router-dom";
 
-const BookCards = ({ searchTerm, limit, showPagination = true }) => {
+const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) => {
   const { addToCart } = useCart();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -58,7 +56,10 @@ const BookCards = ({ searchTerm, limit, showPagination = true }) => {
             <button
               onClick={() => {
                 const token = localStorage.getItem("token");
-                if (!token) return navigate("/login");
+                if (!token) {
+                  if (onOpenLogin) onOpenLogin(); // ✅ Abre el modal de login si no hay token
+                  return;
+                }
 
                 addToCart({
                   id: book.id,

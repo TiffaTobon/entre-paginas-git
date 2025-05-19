@@ -23,7 +23,7 @@ const ShoppingCart = () => {
                 />
                 <div>
                   <h4>{book.title}</h4>
-                  <p>{book.author?.join(", ")}</p>
+                  <p>{book.author}</p>
                   <p>
                     <small>{book.year || "Año desconocido"}</small>
                   </p>

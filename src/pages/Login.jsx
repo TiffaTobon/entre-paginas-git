@@ -1,10 +1,16 @@
-// Login.jsx
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Stack,
+  Link,
+} from "@mui/material";
 import axios from "axios";
-import "../styles/Login.css";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ onClose, onSwitchToRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -20,57 +26,78 @@ const Login = () => {
 
       const { token, usuario } = res.data;
 
-      // Guardar token y usuario en localStorage
       localStorage.setItem("token", token);
-      localStorage.setItem("usuario_id", usuario.id); // útil para subir libros
+      localStorage.setItem("usuario_id", usuario.id);
 
       alert("Inicio de sesión exitoso");
+      if (onClose) onClose();
       navigate("/workspace");
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
       alert("Error: " + (error.response?.data?.mensaje || error.message));
     }
   };
 
   return (
-    <div className="page">
-      <div className="form-container">
-        <h2>Iniciar Sesión</h2>
-        <form onSubmit={handleLogin}>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    <Box component="form" onSubmit={handleLogin}>
+      <Typography variant="h5" gutterBottom textAlign="center">
+        Iniciar Sesión
+      </Typography>
 
-          <label>Contraseña:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+      <Stack spacing={2}>
+        <TextField
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          fullWidth
+          required
+          InputProps={{ sx: { backgroundColor: "white" } }}
+        />
 
-          <button type="submit" className="btn-login">
-            Ingresar
-          </button>
-        </form>
-        <Link to="/">
-          <button type="button" className="btn-secondary">
+        <TextField
+          label="Contraseña"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          fullWidth
+          required
+          InputProps={{ sx: { backgroundColor: "white" } }}
+        />
+
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ backgroundColor: "#6d4c41", '&:hover': { backgroundColor: "#5a3c33" } }}
+        >
+          Ingresar
+        </Button>
+
+        <Button
+          variant="outlined"
+          onClick={() => {
+            if (onClose) onClose();
+            navigate("/");
+          }}
+        >
           Volver al Inicio
-        </button>
-        </Link>
-        <p style={{ textAlign: "center", marginTop: "15px" }}>
-        ¿No tienes cuenta?{" "}
-        <Link to="/register" style={{ color: "#5D4037", fontWeight: "bold", textDecoration: "underline" }}>
-          Regístrate
-        </Link>
-      </p>
+        </Button>
 
-      </div>
-    </div>
+        <Typography variant="body2" textAlign="center">
+          ¿No tienes cuenta?{" "}
+          <Link
+            component="button"
+            variant="body2"
+            onClick={() => {
+              if (onClose) onClose();
+              if (onSwitchToRegister) onSwitchToRegister();
+            }}
+            sx={{ color: "#5D4037", fontWeight: "bold", textDecoration: "underline" }}
+          >
+            Regístrate
+          </Link>
+        </Typography>
+      </Stack>
+    </Box>
   );
 };
 
