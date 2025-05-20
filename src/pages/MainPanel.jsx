@@ -8,6 +8,8 @@ import UserForm from "../components/UserForm";
 import Login from "./Login";
 import axios from "axios";
 import { Modal, Box } from "@mui/material";
+import ChatBoxAuto from "./ChatBoxAuto";
+
 
 const Header = ({ searchTerm, onSearchChange, onOpenRegister, onOpenLogin }) => {
   return (
@@ -117,42 +119,58 @@ const MainPanel = () => {
         />
       </section>
 
-      {/* Chat flotante opcional */}
       {!showChat && (
-        <button className="open-sidebar-button" onClick={() => setShowChat(true)}>
-          💬
-        </button>
-      )}
+  <button className="open-sidebar-button" onClick={() => setShowChat(true)}>
+    💬
+  </button>
+)}
 
-      {showChat && (
-        <div className="sidebar-chat">
-          <div className="sidebar-header">
-            <p>💬 Chat de ayuda</p>
-            <button onClick={() => setShowChat(false)}>✖</button>
-          </div>
-          <div className="sidebar-body">
-            <p><strong>¡Hola!</strong> ¿En qué podemos ayudarte?</p>
-            <div className="chat-messages">
-              {messages.map((msg, index) => (
-                <div key={index} className="chat-message">{msg}</div>
-              ))}
-            </div>
-            <div className="chat-input-container">
-              <input
-                type="text"
-                placeholder="Escribe tu mensaje..."
-                className="chat-input"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleSendMessage();
-                }}
-              />
-              <button className="send-button" onClick={handleSendMessage}>Enviar</button>
-            </div>
-          </div>
-        </div>
-      )}
+{showChat && (
+  <div
+    style={{
+      position: "fixed",
+      bottom: "20px",
+      right: "20px",
+      zIndex: 9999,
+      backgroundColor: "#fff",
+      borderRadius: "12px",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+      width: "400px", // <-- Aumentado el tamaño
+      height: "300px"
+    }}
+  >
+    {/* Encabezado del chat */}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "0.5rem 1rem",
+        backgroundColor: "#f5f5f5",
+        borderTopLeftRadius: "12px",
+        borderTopRightRadius: "12px",
+      }}
+    >
+      <p style={{ margin: 0, fontWeight: "bold", color: "#5d4037" }}>
+        💬 Chat de ayuda
+      </p>
+      <button
+        onClick={() => setShowChat(false)}
+        style={{
+          background: "transparent",
+          border: "none",
+          fontSize: "1.1rem",
+          cursor: "pointer",
+        }}
+      >
+        ✖
+      </button>
+    </div>
+
+    {/* Componente de conversación */}
+    <ChatBoxAuto />
+  </div>
+)}
 
       <footer className="footer_MainPanel">
         <p className="footer_text">© Todos los derechos reservados - Entre Páginas 2025</p>

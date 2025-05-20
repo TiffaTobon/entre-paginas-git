@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import "../styles/WorkSpace.css";
 import "../styles/Header.css";
 import AdminPanel from "../../Admin/AdminPanel";
+import AdminMessages from "../../Admin/AdminMessages";
 
 const WorkSpace = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,6 +19,7 @@ const WorkSpace = () => {
   const [messages, setMessages] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
+  const [adminView, setAdminView] = useState("adminPanel");
 
  useEffect(() => {
   const token = localStorage.getItem("token");
@@ -43,13 +45,16 @@ const WorkSpace = () => {
         isAdmin={isAdmin}
       />
       <div className="workspace_container">
-        <Sidebar isAdmin={isAdmin} />
+        <Sidebar isAdmin={isAdmin} onSelectView={setAdminView} />
 
         {isAdmin ? (
-          <div className="workspace_content_wrapper">
-            <AdminPanel />
-          </div>
-        ) : (
+        <div className="workspace_content_wrapper">
+          {adminView === "adminPanel" && <AdminPanel />}
+          {adminView === "adminMessages" && (
+            <AdminMessages onVolver={() => setAdminView("adminPanel")} />
+          )}
+        </div>
+      ) : (
           <div className="workspace_content_wrapper">
             <div className="workspace_content">
               <h2 className="workspace-title">Libros Destacados</h2>

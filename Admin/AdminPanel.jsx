@@ -11,7 +11,7 @@ const AdminPanel = () => {
       sx={{
         p: 4,
         maxWidth: "1000px",
-        margin: "0 auto",
+        m: "0 auto",
         bgcolor: "#fff",
         borderRadius: 2,
         boxShadow: 3,
@@ -22,30 +22,33 @@ const AdminPanel = () => {
         Panel de Administración
       </Typography>
 
+      {/* SOLO dos botones */}
       <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 4 }}>
         <Button
           variant={view === "usuarios" ? "contained" : "outlined"}
           onClick={() => setView("usuarios")}
-          sx={{ backgroundColor: view === "usuarios" ? "#5D4037" : "", color: view === "usuarios" ? "#fff" : "#5D4037" }}
+          sx={{
+            bgcolor: view === "usuarios" ? "#5D4037" : "",
+            color: view === "usuarios" ? "#fff" : "#5D4037",
+          }}
         >
           Usuarios
         </Button>
+
         <Button
           variant={view === "libros" ? "contained" : "outlined"}
           onClick={() => setView("libros")}
-          sx={{ backgroundColor: view === "libros" ? "#5D4037" : "", color: view === "libros" ? "#fff" : "#5D4037" }}
+          sx={{
+            bgcolor: view === "libros" ? "#5D4037" : "",
+            color: view === "libros" ? "#fff" : "#5D4037",
+          }}
         >
           Libros
         </Button>
       </Box>
 
-     <Box sx={{ mt: 2 }}>
-        {view === "usuarios" ? (
-          <AdminUsers />
-        ) : (
-          <AdminBooks />
-        )}
-      </Box>
+      {/* Contenido */}
+      {view === "usuarios" ? <AdminUsers /> : <AdminBooks />}
     </Box>
   );
 };

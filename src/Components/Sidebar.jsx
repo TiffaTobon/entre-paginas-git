@@ -6,37 +6,38 @@ import {
   FaExchangeAlt,
   FaSellcast,
   FaUsers,
-  FaBook, // 👉 faltaban estos dos
+  FaEnvelope,
+  FaBook, 
 } from "react-icons/fa";
 import "../styles/Sidebar.css";
 
-const Sidebar = ({ isAdmin }) => {
+const Sidebar = ({ isAdmin, onSelectView }) => {
   return (
-    <aside className="sidebar">
-      <h3 className="sidebar_title">Menú</h3>
-      <ul className="sidebar_menu">
-        {isAdmin ? (
-          <>
-            <li>
-              <Link
-                to="/admin-users"
-                className="sidebar_link"
-                data-tooltip="Gestión de Usuarios"
-              >
-                <FaUsers className="sidebar_icon" /> Gestión de Usuarios y libros
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/admin-books"
-                className="sidebar_link"
-                data-tooltip="Gestión de Libros"
-              >
-                <FaBook className="sidebar_icon" /> Gestión de Mensajes
-              </Link>
-            </li>
-          </>
-        ) : (
+  <aside className="sidebar">
+    <h3 className="sidebar_title">Menú</h3>
+    <ul className="sidebar_menu">
+      {isAdmin ? (
+        <>
+          <li>
+            <button
+              className="sidebar_link"
+              data-tooltip="Gestión de Usuarios y Libros"
+              onClick={() => onSelectView("adminPanel")}
+            >
+              <FaUsers className="sidebar_icon" /> Usuarios-Libros
+            </button>
+          </li>
+          <li>
+            <button
+              className="sidebar_link"
+              data-tooltip="Gestión de Mensajes"
+              onClick={() => onSelectView("adminMessages")}
+            >
+              <FaEnvelope className="sidebar_icon" /> Mensajes
+            </button>
+          </li>
+        </>
+      ) : (
           <>
             <li>
               <Link
