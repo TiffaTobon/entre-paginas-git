@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
+import AdminUsers from "./AdminUsers";
+import AdminBooks from "./AdminBooks";
 
 const AdminPanel = () => {
   const [view, setView] = useState("usuarios");
@@ -37,11 +39,11 @@ const AdminPanel = () => {
         </Button>
       </Box>
 
-      <Box>
+     <Box sx={{ mt: 2 }}>
         {view === "usuarios" ? (
-          <Typography align="center">[Aquí irá la tabla de usuarios]</Typography>
+          <AdminUsers />
         ) : (
-          <Typography align="center">[Aquí irá la tabla de libros]</Typography>
+          <AdminBooks />
         )}
       </Box>
     </Box>

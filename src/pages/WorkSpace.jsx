@@ -47,8 +47,7 @@ const WorkSpace = () => {
 
         {isAdmin ? (
           <div className="workspace_content_wrapper">
-            <h2 className="workspace-title">Panel de Administrador</h2>
-            <p>Desde aquí puedes gestionar usuarios y libros.</p>
+            <AdminPanel />
           </div>
         ) : (
           <div className="workspace_content_wrapper">

@@ -23,7 +23,7 @@ const Sidebar = ({ isAdmin }) => {
                 className="sidebar_link"
                 data-tooltip="Gestión de Usuarios"
               >
-                <FaUsers className="sidebar_icon" /> Gestión de Usuarios
+                <FaUsers className="sidebar_icon" /> Gestión de Usuarios y libros
               </Link>
             </li>
             <li>
@@ -32,7 +32,7 @@ const Sidebar = ({ isAdmin }) => {
                 className="sidebar_link"
                 data-tooltip="Gestión de Libros"
               >
-                <FaBook className="sidebar_icon" /> Gestión de Libros
+                <FaBook className="sidebar_icon" /> Gestión de Mensajes
               </Link>
             </li>
           </>
