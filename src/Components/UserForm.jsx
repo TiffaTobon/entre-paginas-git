@@ -70,9 +70,6 @@ const UserForm = ({ onSubmit, onClose, mode = "register", initialValues = {} }) 
     boxShadow: "0 0 12px rgba(0,0,0,0.1)",
   }}
 >
-  <Typography variant="h5" gutterBottom textAlign="center" color="#4e342e">
-    {mode === "edit" ? "Editar Perfil" : "Registro"}
-  </Typography>
 
   <Box component="form" onSubmit={handleSubmit}>
     <Stack spacing={2}>
