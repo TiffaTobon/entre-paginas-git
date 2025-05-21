@@ -1,67 +1,101 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 import BookCards from "../Components/BookCards";
-import ShoppingCart from "./ShoppingCart"; // si no está aún
-import { Modal, Box } from "@mui/material";
+import ShoppingCart from "./ShoppingCart"; 
+import { Modal, Box, useMediaQuery, useTheme } from "@mui/material";
 import "../styles/WorkSpace.css";
 import "../styles/Header.css";
 
 const WorkSpace = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [openCartModal, setOpenCartModal] = useState(false); 
-  const [showChat, setShowChat] = useState(false);
-  const [inputMessage, setInputMessage] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [openCartModal, setOpenCartModal] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  // Memoized handlers
+  const handleSearchChange = useCallback((term) => {
+    setSearchTerm(term);
+  }, []);
+
+  const toggleCartModal = useCallback(() => {
+    setOpenCartModal(prev => !prev);
+  }, []);
+
+  const navigateToAllBooks = useCallback(() => {
+    navigate("/all-books");
+  }, [navigate]);
 
   return (
-    <>
+    <div className="workspace-layout">
       <Header
         searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        onOpenCart={() => setOpenCartModal(true)}
+        onSearchChange={handleSearchChange}
+        onOpenCart={toggleCartModal}
       />
-      <div className="workspace_container">
+      
+      <div className="workspace-container">
         <Sidebar />
-        <div className="workspace_content_wrapper">
-          <div className="workspace_content">
-            <h2 className="workspace-title">Libros Destacados</h2>
-            <BookCards searchTerm={searchTerm} limit={8} showPagination={false} />
+        
+        <main className="workspace-content-wrapper">
+          <div className="workspace-content">
+            <h1 className="workspace-title">Libros Destacados</h1>
+            
+            <BookCards 
+              searchTerm={searchTerm} 
+              limit={8} 
+              showPagination={false} 
+            />
 
-            <div style={{ textAlign: "center", marginTop: "15px" }}>
-              <button className="btn-secondary" onClick={() => navigate("/all-books")}>
+            <div className="view-all-container">
+              <button 
+                className="btn-secondary view-all-button"
+                onClick={navigateToAllBooks}
+              >
                 Ver todos los libros
               </button>
             </div>
           </div>
 
-          <footer className="footer_Workspace">
-            <p className="footer_Workspace_text">
-              © Todos los derechos reservados - Entre Páginas 2025
+          <footer className="workspace-footer">
+            <p className="footer-text">
+              © {new Date().getFullYear()} Todos los derechos reservados - Entre Páginas
             </p>
           </footer>
-          <Modal open={openCartModal} onClose={() => setOpenCartModal(false)}>
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: { xs: "90%", sm: 400 },
-                bgcolor: "background.paper",
-                borderRadius: 2,
-                boxShadow: 24,
-                p: 4,
-              }}
-            >
-              <ShoppingCart onClose={() => setOpenCartModal(false)} />
-            </Box>
-          </Modal>
-        </div>
+        </main>
+
+        {/* Responsive Cart Modal */}
+        <Modal 
+          open={openCartModal} 
+          onClose={toggleCartModal}
+          aria-labelledby="shopping-cart-modal"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: isMobile ? "95%" : 500,
+              maxWidth: "100%",
+              maxHeight: "90vh",
+              bgcolor: "background.paper",
+              borderRadius: 2,
+              boxShadow: 24,
+              p: 3,
+              overflowY: 'auto',
+              '&:focus': {
+                outline: 'none'
+              }
+            }}
+          >
+            <ShoppingCart onClose={toggleCartModal} />
+          </Box>
+        </Modal>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,55 +1,152 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
 import "../styles/ShoppingCart.css";
+import { FiTrash2, FiArrowLeft, FiShoppingCart } from "react-icons/fi";
 
 const ShoppingCart = ({ onClose }) => {
-  const { cartItems, removeFromCart, clearCart } = useCart();
+  const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
+  const navigate = useNavigate();
+
+  const total = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+  const itemCount = cartItems.reduce((count, item) => count + (item.quantity || 1), 0);
+
+  const handleBuy = () => {
+    navigate("/pago", {
+      state: {
+        total,
+        items: cartItems,
+      },
+    });
+  };
+
+  const handleQuantityChange = (index, newQuantity) => {
+    if (newQuantity >= 1 && newQuantity <= 10) {
+      updateQuantity(index, newQuantity);
+    }
+  };
 
   return (
     <div className="shopping-cart">
-      <h2>Carrito de Compras</h2>
+      <div className="cart-header">
+        <h2>
+          <FiShoppingCart /> Carrito de Compras
+        </h2>
+        {onClose && (
+          <button className="close-button" onClick={onClose}>
+            &times;
+          </button>
+        )}
+      </div>
+
       {cartItems.length === 0 ? (
-        <p>Tu carrito está vacío.</p>
+        <div className="empty-cart">
+          <p>Tu carrito está vacío.</p>
+          <button 
+            className="continue-shopping-button" 
+            onClick={onClose || (() => navigate('/all-books'))}
+          >
+            Continuar comprando
+          </button>
+        </div>
       ) : (
         <>
           <ul className="cart-list">
             {cartItems.map((book, index) => (
-              <li key={index} className="cart-item">
-                <img
-                  src={book.image || placeholderImage}
-                  alt={book.title}
-                  className="cart-image"
-                />
-                <div>
-                  <h4>{book.title}</h4>
-                  <p>{book.author}</p>
-                  <p>
-                    <small>{book.year || "Año desconocido"}</small>
-                  </p>
+              <li key={`${book.id}-${index}`} className="cart-item">
+                <div className="cart-item-image">
+                  <img
+                    src={book.image || placeholderImage}
+                    alt={book.title}
+                    onError={(e) => {
+                      e.target.src = placeholderImage;
+                    }}
+                  />
                 </div>
-                <button onClick={() => removeFromCart(index)} className="cart-action-button">
-                Eliminar
-              </button>
+                <div className="cart-item-details">
+                  <h4>{book.title}</h4>
+                  <p className="author">{book.author}</p>
+                  <div className="quantity-control">
+                    <button 
+                      onClick={() => handleQuantityChange(index, (book.quantity || 1) - 1)}
+                      disabled={(book.quantity || 1) <= 1}
+                    >
+                      -
+                    </button>
+                    <span>{book.quantity || 1}</span>
+                    <button 
+                      onClick={() => handleQuantityChange(index, (book.quantity || 1) + 1)}
+                      disabled={(book.quantity || 1) >= 10}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div className="cart-item-price">
+                  <p>
+                    {new Intl.NumberFormat("es-CO", {
+                      style: "currency",
+                      currency: "COP",
+                    }).format(book.price * (book.quantity || 1))}
+                  </p>
+                  <button
+                    onClick={() => removeFromCart(index)}
+                    className="remove-button"
+                    aria-label="Eliminar producto"
+                  >
+                    <FiTrash2 />
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
 
-          <button onClick={clearCart} className="buy-button">
-           Vaciar carrito
-          </button>
+          <div className="cart-summary">
+            <div className="summary-row">
+              <span>Productos ({itemCount}):</span>
+              <span>
+                {new Intl.NumberFormat("es-CO", {
+                  style: "currency",
+                  currency: "COP",
+                }).format(total)}
+              </span>
+            </div>
+            <div className="summary-row total">
+              <span>Total:</span>
+              <span>
+                {new Intl.NumberFormat("es-CO", {
+                  style: "currency",
+                  currency: "COP",
+                }).format(total)}
+              </span>
+            </div>
+          </div>
 
-          <button
-            onClick={() => {
-              alert("¡Gracias por tu compra!");
-              clearCart(); // Vacía el carrito al comprar
-            }}
-            className="buy-button"
-          >
-            Comprar
-          </button>
+          <div className="cart-actions">
+            <button 
+              onClick={clearCart} 
+              className="secondary-button"
+              disabled={cartItems.length === 0}
+            >
+              Vaciar carrito
+            </button>
+            <button 
+              onClick={handleBuy} 
+              className="primary-button"
+              disabled={cartItems.length === 0}
+            >
+              Proceder al pago
+            </button>
+          </div>
+
           {onClose && (
-            <button className="modal-return-button" onClick={onClose}>Volver</button>
+            <button 
+              className="continue-shopping-button" 
+              onClick={onClose}
+            >
+              <FiArrowLeft /> Seguir comprando
+            </button>
           )}
         </>
       )}
