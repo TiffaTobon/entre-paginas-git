@@ -102,7 +102,7 @@ const ManageBooks = () => {
                 color="primary"
                 onClick={() => navigate("/workspace")}
               >
-                Volver Menú
+                Volver Al Inicio
               </Button>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import UserForm from "../components/UserForm"; // ajusta la ruta si es diferente
+import UserForm from "../Components/UserForm"; // ajusta la ruta si es diferente
 
 const Register = () => {
   const navigate = useNavigate();

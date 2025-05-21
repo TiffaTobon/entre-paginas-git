@@ -1,34 +1,42 @@
-import React from "react";
-import UserForm from "../Components/UserForm";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/UserForm.css"
+import Header from "../Components/Header";
+import Sidebar from "../Components/Sidebar";
+import EditProfileModal from "../Components/EditProfileModal";
 
 const EditProfile = () => {
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
 
-  // Ejemplo de datos iniciales que se pueden ajustar para que provengan de Firebase
-  const initialData = {
-    email: "usuario@example.com",
-    nombres: "Juan",
-    apellidos: "Pérez",
-    fechaNacimiento: "1990/01/01",
-    genero: "masculino",
-    aceptoTerminos: true,
-  };
-
-  const handleEdit = (formData) => {
-    // Aquí la lógica para actualizar el perfil
-    console.log("Datos actualizados:", formData);
-    alert("Perfil actualizado");
-    navigate("/workspace"); 
-  };
+  // Abrir el modal automáticamente al cargar la página
+  useEffect(() => {
+    setOpenModal(true);
+  }, []);
 
   return (
-    <UserForm
-      onSubmit={handleEdit}
-      mode="edit"
-      initialValues={initialData}
-    />
+    <>
+      <Header />
+      <div className="workspace_container">
+        <Sidebar />
+        <div className="workspace_content_wrapper">
+          {/* Modal que se abre automáticamente */}
+          <EditProfileModal
+            open={openModal}
+            onClose={() => navigate("/workspace")} // Al cerrar, regresar a vista principal
+            onSuccess={() => {
+              // acción opcional luego de editar
+              console.log("Perfil actualizado");
+            }}
+          />
+
+          <footer className="footer_Workspace">
+            <p className="footer_Workspace_text">
+              © Todos los derechos reservados - Entre Páginas 2025
+            </p>
+          </footer>
+        </div>
+      </div>
+    </>
   );
 };
 
