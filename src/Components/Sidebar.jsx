@@ -27,15 +27,6 @@ const Sidebar = ({ isAdmin, onSelectView }) => {
               <FaUsers className="sidebar_icon" /> Usuarios-Libros
             </button>
           </li>
-          <li>
-            <button
-              className="sidebar_link"
-              data-tooltip="Gestión de Mensajes"
-              onClick={() => onSelectView("adminMessages")}
-            >
-              <FaEnvelope className="sidebar_icon" /> Mensajes
-            </button>
-          </li>
         </>
       ) : (
           <>
