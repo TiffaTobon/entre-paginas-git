@@ -1,62 +1,81 @@
-.workspace_container {
+.workspace-layout {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
-.workspace_content_wrapper {
-  flex: 1;
+.workspace-container {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #f9f9f9;
-}
-.h2{
-  justify-content: center;
-  text-align: center;
-}
-.workspace_content {
-  padding: 20px;
   flex: 1;
 }
 
-  
-  .sidebar {
-    width: 200px;
-    background-color: #f4f4f4;
-    padding: 20px;
+.workspace-content-wrapper {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background: #fdfbf9;
+}
+
+.workspace-content {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.workspace-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.view-all-container {
+  text-align: center;
+  margin: 25px 0;
+}
+
+.view-all-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.view-all-button:hover {
+  background-color: #e0e0e0;
+}
+
+.workspace-footer {
+  margin-top: 40px;
+  padding: 20px 0;
+  text-align: center;
+  border-top: 1px solid #eee;
+}
+
+.footer-text {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .workspace-container {
+    flex-direction: column;
   }
   
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar li {
-    margin-bottom: 15px;
+  .workspace-content {
+    padding: 15px;
   }
   
   .workspace-title {
-    text-align: center;
-    color: #5D4037; 
-    font-size: 28px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    font-weight: bold;
+    font-size: 1.5rem;
   }
-    /* Footer */
-    .footer_Workspace {
-      background-color: #F4E1C1;
-      color: #5D4037;
-      text-align: center;
-      padding: 15px;
-      border-top: 1px solid #ccc;
-    }
-    
-    .footer_Workspace_text {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 600;
-    }
-  
-  
-  
+}
+
+.workspace_bar{
+  background: #fffcf9;
+}
+
