@@ -10,16 +10,16 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const UserForm = ({ onSubmit, onClose }) => {
+const UserForm = ({ onSubmit, onClose, mode = "register", initialValues = {} }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    nombres: "",
-    apellidos: "",
-    email: "",
+    nombres: initialValues.nombres || "",
+    apellidos: initialValues.apellidos || "",
+    email: initialValues.email || "",
     password: "",
     confirmarPassword: "",
-    aceptoTerminos: false,
+    aceptoTerminos: initialValues.aceptoTerminos ?? false,
   });
 
   const [errores, setErrores] = useState({});
@@ -35,12 +35,16 @@ const UserForm = ({ onSubmit, onClose }) => {
   const validar = () => {
     const newErrors = {};
     if (formData.nombres.length < 2) newErrors.nombres = "Nombre inválido";
-    if (formData.apellidos.length < 2) newErrors.apellidos = "Apellido inválido";
+    if (formData.apellidos.length < 2 && mode === "register") newErrors.apellidos = "Apellido inválido";
     if (!formData.email.includes("@")) newErrors.email = "Email inválido";
-    if (formData.password.length < 6) newErrors.password = "Mínimo 6 caracteres";
-    if (formData.password !== formData.confirmarPassword)
-      newErrors.confirmarPassword = "Las contraseñas no coinciden";
-    if (!formData.aceptoTerminos)
+
+    if (mode === "register" || formData.password) {
+      if (formData.password.length < 6) newErrors.password = "Mínimo 6 caracteres";
+      if (formData.password !== formData.confirmarPassword)
+        newErrors.confirmarPassword = "Las contraseñas no coinciden";
+    }
+
+    if (mode === "register" && !formData.aceptoTerminos)
       newErrors.aceptoTerminos = "Debes aceptar los términos";
 
     setErrores(newErrors);
@@ -56,107 +60,107 @@ const UserForm = ({ onSubmit, onClose }) => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
-      <Typography variant="h5" gutterBottom textAlign="center">
-        Registro
-      </Typography>
+    <Box
+  sx={{
+    maxWidth: 800,
+    margin: "40px auto",
+    padding: 4,
+    backgroundColor: "#fafafa",
+    borderRadius: 4,
+    boxShadow: "0 0 12px rgba(0,0,0,0.1)",
+  }}
+>
 
-      <Stack spacing={2}>
-        <TextField
-          label="Nombres"
-          name="nombres"
-          value={formData.nombres}
-          onChange={handleChange}
-          error={!!errores.nombres}
-          helperText={errores.nombres}
-          fullWidth
-          InputProps={{ sx: { backgroundColor: "white" } }}
-        />
+  <Box component="form" onSubmit={handleSubmit}>
+    <Stack spacing={2}>
+      <TextField
+        label="Nombre completo"
+        name="nombres"
+        value={formData.nombres}
+        onChange={handleChange}
+        error={!!errores.nombres}
+        helperText={errores.nombres}
+        fullWidth
+        InputProps={{ sx: { backgroundColor: "white" } }}
+      />
 
-        <TextField
-          label="Apellidos"
-          name="apellidos"
-          value={formData.apellidos}
-          onChange={handleChange}
-          error={!!errores.apellidos}
-          helperText={errores.apellidos}
-          fullWidth
-          InputProps={{ sx: { backgroundColor: "white" } }}
-        />
+      <TextField
+        label="Email"
+        name="email"
+        type="email"
+        value={formData.email}
+        onChange={handleChange}
+        error={!!errores.email}
+        helperText={errores.email}
+        fullWidth
+        InputProps={{ sx: { backgroundColor: "white" } }}
+      />
 
-        <TextField
-          label="Email"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          error={!!errores.email}
-          helperText={errores.email}
-          fullWidth
-          InputProps={{ sx: { backgroundColor: "white" } }}
-        />
+      <TextField
+        label="Contraseña"
+        name="password"
+        type="password"
+        value={formData.password}
+        onChange={handleChange}
+        error={!!errores.password}
+        helperText={errores.password}
+        fullWidth
+        InputProps={{ sx: { backgroundColor: "white" } }}
+      />
 
-        <TextField
-          label="Contraseña"
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-          error={!!errores.password}
-          helperText={errores.password}
-          fullWidth
-          InputProps={{ sx: { backgroundColor: "white" } }}
-        />
+      <TextField
+        label="Confirmar Contraseña"
+        name="confirmarPassword"
+        type="password"
+        value={formData.confirmarPassword}
+        onChange={handleChange}
+        error={!!errores.confirmarPassword}
+        helperText={errores.confirmarPassword}
+        fullWidth
+        InputProps={{ sx: { backgroundColor: "white" } }}
+      />
 
-        <TextField
-          label="Confirmar Contraseña"
-          name="confirmarPassword"
-          type="password"
-          value={formData.confirmarPassword}
-          onChange={handleChange}
-          error={!!errores.confirmarPassword}
-          helperText={errores.confirmarPassword}
-          fullWidth
-          InputProps={{ sx: { backgroundColor: "white" } }}
-        />
+      {mode === "register" && (
+        <>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="aceptoTerminos"
+                checked={formData.aceptoTerminos}
+                onChange={handleChange}
+                color="primary"
+              />
+            }
+            label="Acepto los términos y condiciones"
+          />
+          {errores.aceptoTerminos && (
+            <Typography variant="caption" color="error">
+              {errores.aceptoTerminos}
+            </Typography>
+          )}
+        </>
+      )}
 
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="aceptoTerminos"
-              checked={formData.aceptoTerminos}
-              onChange={handleChange}
-              color="primary"
-            />
-          }
-          label="Acepto los términos y condiciones"
-        />
-
-        {errores.aceptoTerminos && (
-          <Typography variant="caption" color="error">
-            {errores.aceptoTerminos}
-          </Typography>
-        )}
-
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{ backgroundColor: "#6d4c41", '&:hover': { backgroundColor: "#5a3c33" } }}
-        >
-          Registrar
-        </Button>
-
-        <Button
-        variant="outlined"
-        onClick={() => {
-          if (onClose) onClose(); // Cierra el modal si se pasó la prop
-          navigate("/");
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{
+          backgroundColor: "#6d4c41",
+          "&:hover": { backgroundColor: "#5a3c33" },
         }}
       >
+        {mode === "edit" ? "Guardar Cambios" : "Registrar"}
+      </Button>
+
+      <Button variant="outlined" onClick={() => {
+        if (onClose) onClose();
+        navigate("/workspace");
+      }}>
         Volver al Inicio
       </Button>
-      </Stack>
-    </Box>
+    </Stack>
+  </Box>
+</Box>
   );
 };
 

@@ -6,7 +6,7 @@ import {
   FaExchangeAlt,
   FaSellcast,
   FaUsers,
-  FaEnvelope,
+  FaHome,
   FaBook, 
 } from "react-icons/fa";
 import "../styles/Sidebar.css";
@@ -27,18 +27,19 @@ const Sidebar = ({ isAdmin, onSelectView }) => {
               <FaUsers className="sidebar_icon" /> Usuarios-Libros
             </button>
           </li>
-          <li>
-            <button
-              className="sidebar_link"
-              data-tooltip="Gestión de Mensajes"
-              onClick={() => onSelectView("adminMessages")}
-            >
-              <FaEnvelope className="sidebar_icon" /> Mensajes
-            </button>
-          </li>
+          
         </>
       ) : (
           <>
+          <li>
+          <Link
+            to="/workspace"
+            className="sidebar_link"
+            data-tooltip="Inicio"
+          >
+            <FaHome className="sidebar_icon" /> Inicio
+          </Link>
+        </li>
             <li>
               <Link
                 to="/profile-edit"

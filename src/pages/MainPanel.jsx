@@ -4,7 +4,7 @@ import BookCards from "../Components/BookCards";
 import "../styles/MainPanel.css";
 import logo from "../assets/Images/logoEntrePaginas.jpg";
 import bannerLibro from "../assets/Images/bannerlibro.png";
-import UserForm from "../components/UserForm"; 
+import UserForm from "../Components/UserForm"; 
 import Login from "./Login";
 import axios from "axios";
 import { Modal, Box } from "@mui/material";

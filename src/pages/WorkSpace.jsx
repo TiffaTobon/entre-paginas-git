@@ -4,12 +4,13 @@ import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 import BookCards from "../Components/BookCards";
 import ShoppingCart from "./ShoppingCart";
-import { Modal, Box } from "@mui/material";
+import { Modal, Box, Button } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import "../styles/WorkSpace.css";
 import "../styles/Header.css";
 import AdminPanel from "../../Admin/AdminPanel";
 import AdminMessages from "../../Admin/AdminMessages";
+import placeholderImage from "../assets/Images/placeholder-book.jpg";
 
 const WorkSpace = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,6 +54,11 @@ const WorkSpace = () => {
           {adminView === "adminMessages" && (
             <AdminMessages onVolver={() => setAdminView("adminPanel")} />
           )}
+          <footer className="footer_Workspace">
+            <p className="footer_Workspace_text">
+              © Todos los derechos reservados - Entre Páginas 2025
+            </p>
+          </footer>
         </div>
       ) : (
           <div className="workspace_content_wrapper">
@@ -61,9 +67,13 @@ const WorkSpace = () => {
               <BookCards searchTerm={searchTerm} limit={8} showPagination={false} />
 
               <div style={{ textAlign: "center", marginTop: "15px" }}>
-                <button className="btn-secondary" onClick={() => navigate("/all-books")}>
-                  Ver todos los libros
-                </button>
+                 <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => navigate("/all-books")}
+                    >
+                   Ver todos los libros
+                  </Button>
               </div>
             </div>
 
@@ -92,6 +102,8 @@ const WorkSpace = () => {
             </Modal>
           </div>
         )}
+         
+          
       </div>
     </>
   );

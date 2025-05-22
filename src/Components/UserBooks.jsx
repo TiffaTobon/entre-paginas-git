@@ -1,118 +1,114 @@
 import React, { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
-import { db } from "../Firebase";
+import Header from "../Components/Header";
+import Sidebar from "../Components/Sidebar";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import "../styles/UserBooks.css";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
+import "../styles/UserBooks.css";
 
 const UserBooks = () => {
   const [books, setBooks] = useState([]);
-  const auth = getAuth();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserBooks = async () => {
-      const user = auth.currentUser;
-      if (!user) return;
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-      const q = query(
-        collection(db, "books"),
-        where("usuarioId", "==", user.uid)
-      );
-      const querySnapshot = await getDocs(q);
+    try {
+      const decoded = jwtDecode(token);
+      if (decoded.email === "adminentrepaginas@gmail.com") {
+        setIsAdmin(true);
+      }
 
-      const userBooks = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const fetchBooks = async () => {
+        const res = await fetch("http://localhost:3000/libros/usuario", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        setBooks(data.datos || []);
+      };
 
-      setBooks(userBooks);
-    };
-
-    fetchUserBooks();
+      fetchBooks();
+    } catch (error) {
+      console.error("Error al obtener libros:", error);
+    }
   }, []);
 
   const handleDelete = async (id) => {
     const confirm = window.confirm("¿Estás seguro de eliminar este libro?");
     if (!confirm) return;
 
-    await deleteDoc(doc(db, "books", id));
-    setBooks((prev) => prev.filter((book) => book.id !== id));
+    try {
+      const token = localStorage.getItem("token");
+      await fetch(`http://localhost:3000/libros/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setBooks((prev) => prev.filter((book) => book.id !== id));
+    } catch (error) {
+      console.error("Error al eliminar libro:", error);
+    }
   };
 
   return (
-    <div className="user-books-section">
-      <h2>Mis Libros</h2>
+    <>
+      <Header
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        isAdmin={isAdmin}
+      />
+      <div className="workspace_container">
+        <Sidebar isAdmin={isAdmin} />
 
-      {books.length === 0 ? (
-        <div style={{ textAlign: "center", marginTop: "30px" }}>
-          <p>No tienes libros agregados.</p>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "10px",
-              marginTop: "10px",
-            }}
-          >
-            <button
-              className="btn-primary"
-              onClick={() => navigate("/add-book")}
-            >
-              ➕ Agregar Libro
-            </button>
-            <button
-              className="btn-secondary"
-              onClick={() => navigate("/manage-books")}
-            >
-              Ir a Mis Libros
-            </button>
-          </div>
-        </div>
-      ) : (
-        <ul className="user-book-list">
-          {books.map((book) => (
-            <li key={book.id} className="user-book-card">
-              <img
-                src={book.imagen ? book.imagen : placeholderImage}
-                alt={book.titulo}
-                className="bookcards-image"
-              />
-              <h4>{book.titulo}</h4>
-              <p>
-                <strong>Autor:</strong> {book.autor}
-              </p>
-              <p>
-                <strong>Categoría:</strong> {book.categoria}
-              </p>
-              <p>{book.descripcion}</p>
-              <div className="user-book-actions">
-                <button
-                  className="btn-edit"
-                  onClick={() => navigate(`/edit-book/${book.id}`)}
-                >
-                  Editar
-                </button>
-                <button
-                  className="btn-delete"
-                  onClick={() => handleDelete(book.id)}
-                >
-                  Eliminar
-                </button>
+        <div className="workspace_content_wrapper">
+          <div className="user-books-section">
+            <h2>Mis Libros</h2>
+
+            {books.length === 0 ? (
+              <div style={{ textAlign: "center", marginTop: "30px" }}>
+                <p>No tienes libros agregados.</p>
+                <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "10px" }}>
+                  <button className="btn-primary" onClick={() => navigate("/add-book")}>
+                    ➕ Agregar Libro
+                  </button>
+                </div>
               </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+            ) : (
+              <ul className="user-book-list">
+                {books.map((book) => (
+                  <li key={book.id} className="user-book-card">
+                    <img
+                      src={book.imagen ? `http://localhost:3000/uploads/${book.imagen}` : placeholderImage}
+                      alt={book.titulo}
+                      className="bookcards-image"
+                    />
+                    <h4>{book.titulo}</h4>
+                    <p><strong>Autor:</strong> {book.autor}</p>
+                    <p><strong>Precio:</strong> {book.precio}</p>
+                    <p>{book.descripcion}</p>
+                    <div className="user-book-actions">
+                      <button className="btn-edit" onClick={() => navigate(`/edit-book/${book.id}`)}>Editar</button>
+                      <button className="btn-delete" onClick={() => handleDelete(book.id)}>Eliminar</button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <footer className="footer_Workspace">
+              <p className="footer_Workspace_text">
+                © Todos los derechos reservados - Entre Páginas 2025
+              </p>
+            </footer>
+        </div>
+      </div>
+    </>
   );
 };
 
