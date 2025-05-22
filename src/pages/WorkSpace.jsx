@@ -10,6 +10,7 @@ import "../styles/WorkSpace.css";
 import "../styles/Header.css";
 import AdminPanel from "../../Admin/AdminPanel";
 import AdminMessages from "../../Admin/AdminMessages";
+import placeholderImage from "../assets/Images/placeholder-book.jpg";
 
 const WorkSpace = () => {
   const [searchTerm, setSearchTerm] = useState("");

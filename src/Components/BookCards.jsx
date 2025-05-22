@@ -1,13 +1,29 @@
 import React, { useEffect, useState } from "react";
 import "../styles/BookCards.css";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
+import defaultImage from "../assets/Images/portadaDefecto.png";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
+import BookDetailsModal from "./BookDetailsModal";
 
 const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) => {
   const { addToCart } = useCart();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = (book) => {
+    setSelectedBook(book);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedBook(null);
+    setOpenModal(false);
+  };
+
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -41,18 +57,24 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
         {books.map((book, index) => (
           <li key={index} className="bookcards-item">
             <img
-              src={
-                book.imagen
-                  ? `http://localhost:3000/uploads/${book.imagen}`
-                  : placeholderImage
-              }
-              alt={book.titulo}
-              className="bookcards-image"
-            />
+                              src={
+                              book.imagen && book.imagen !== "null" && book.imagen.trim() !== ""
+                                ? `http://localhost:3000/uploads/${book.imagen}`
+                                : defaultImage
+                            }
+                              alt={book.titulo}
+                              className="bookcards-image"
+                            />
             <h4>{book.titulo}</h4>
             <p>{book.autor}</p>
             <p className="precio">${book.precio}</p>
             <p className="stock">Stock: {book.stock}</p>
+            <button
+              className="ver-mas-button"
+              onClick={() => handleOpenModal(book)}
+            >
+              Ver descripción
+            </button>
             <button
               onClick={() => {
                 const token = localStorage.getItem("token");
@@ -79,6 +101,11 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
           </li>
         ))}
       </ul>
+      <BookDetailsModal
+          open={openModal}
+          onClose={handleCloseModal}
+          book={selectedBook}
+        />
     </>
   );
 };
