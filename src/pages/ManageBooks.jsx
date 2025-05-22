@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { Modal, Box, Button} from "@mui/material";
+import { Modal, Box, Button } from "@mui/material";
 import axios from "axios";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
+import CartModal from "../Components/CartModal";
 import AddBook from "./AddBook";
 import EditBookModal from "../../Admin/EditBookModal";
-import placeholderImage from "../assets/Images/placeholder-book.jpg";
+import BookDetailsModal from "../Components/BookDetailsModal";
+import bannerLibro from "../assets/Images/bannerlibro.png";
 import defaultImage from "../assets/Images/portadaDefecto.png";
 import "../styles/UserBooks.css";
-
+import "../styles/WorkSpace.css";
+import "../styles/Header.css"; 
 
 const ManageBooks = () => {
+  const [openCartModal, setOpenCartModal] = useState(false);
   const [books, setBooks] = useState([]);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [bookToEdit, setBookToEdit] = useState(null);
+  const [openDetailsModal, setOpenDetailsModal] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+ 
   const navigate = useNavigate();
 
   const fetchUserBooks = async () => {
@@ -61,6 +68,12 @@ const ManageBooks = () => {
     setEditModalOpen(true);
   };
 
+  const openDetails = (book) => {
+  setSelectedBook(book);
+  setOpenDetailsModal(true);
+};
+
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -76,79 +89,95 @@ const ManageBooks = () => {
   }, []);
 
   return (
-    <>
+    <div className="workspace-layout">
       <Header
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         isAdmin={isAdmin}
+        onOpenCart={() => setOpenCartModal(true)} // importante
       />
 
-      <div className="workspace_container">
+      <img
+        src={bannerLibro}
+        alt="Banner Libros"
+        className="workspace_banner"
+      />
+
+      <div className="workspace-container">
         <Sidebar isAdmin={isAdmin} />
 
         <div className="workspace_content_wrapper">
-          <div className="manage-books-header">
-            <h2 className="user-books-title">Mis Libros</h2>
-            <div className="manage-books-buttons">
-              <Button
-                variant="contained"
-                sx={{ bgcolor: "#6d4c41", '&:hover': { bgcolor: "#5d4037" }, mr: 1 }}
-                onClick={() => setOpenAddModal(true)}
-              >
-                Agregar Libro
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => navigate("/workspace")}
-              >
-                Volver Al Inicio
-              </Button>
+          <div className="workspace_content">
+            <div className="manage-books-header">
+              <h2 className="user-books-title">Mis Libros</h2>
+              <div className="manage-books-buttons">
+                <Button
+                  variant="contained"
+                  sx={{ bgcolor: "#6d4c41", '&:hover': { bgcolor: "#5d4037" }, mr: 1 }}
+                  onClick={() => setOpenAddModal(true)}
+                >
+                  Agregar Libro
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => navigate("/workspace")}
+                >
+                  Volver Al Inicio
+                </Button>
+              </div>
             </div>
-          </div>
 
-          {books.length === 0 ? (
-            <div className="empty-book-card">
-              <h3>No tienes libros agregados.</h3>
-              <p>Haz clic en "Agregar Libro" para crear uno nuevo.</p>
-            </div>
-          ) : (
-            <ul className="user-book-list">
-              {books.map((book) => (
-                <li key={book.id} className="user-book-card">
-                  <img
-                  src={
-                  book.imagen && book.imagen !== "null" && book.imagen.trim() !== ""
-                    ? `http://localhost:3000/uploads/${book.imagen}`
-                    : defaultImage
-                }
-                  alt={book.titulo}
-                  className="bookcards-image"
-                />
-                  <h4>{book.titulo}</h4>
-                  <p><strong>Autor:</strong> {book.autor}</p>
-                  <p><strong>Precio:</strong> {book.precio}</p>
-                  <p>{book.descripcion}</p>
-                  <div className="user-book-actions">
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => openEditModal(book)}
+            {books.length === 0 ? (
+              <div className="empty-book-card">
+                <h3>No tienes libros agregados.</h3>
+                <p>Haz clic en "Agregar Libro" para crear uno nuevo.</p>
+              </div>
+            ) : (
+              <ul className="user-book-list">
+                {books.map((book) => (
+                  <li key={book.id} className="user-book-card">
+                    <img
+                      src={
+                        book.imagen && book.imagen !== "null" && book.imagen.trim() !== ""
+                          ? `http://localhost:3000/uploads/${book.imagen}`
+                          : defaultImage
+                      }
+                      alt={book.titulo}
+                      className="bookcards-image"
+                      onClick={() => openDetails(book)}
+                      style={{ cursor: "pointer" }}
+                    />
+                    <h4>{book.titulo}</h4>
+                    <p><strong>Autor:</strong> {book.autor}</p>
+                    <p><strong>Precio:</strong> {book.precio}</p>
+                    <p
+                      onClick={() => openDetails(book)}
+                      style={{ cursor: "pointer", textDecoration: "underline", color: "#5D4037" }}
                     >
-                      Editar
-                    </Button>
-                    <Button
-                      variant="contained"
-                      sx={{ bgcolor: "#6d4c41", '&:hover': { bgcolor: "#5d4037" }, mr: 1 }}
-                      onClick={() => handleDelete(book.id)}
-                    >
-                      Eliminar
-                    </Button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+                      Ver descripción
+                    </p>
+                    <div className="user-book-actions">
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => openEditModal(book)}
+                      >
+                        Editar
+                      </Button>
+                      <Button
+                        variant="contained"
+                        sx={{ bgcolor: "#6d4c41", '&:hover': { bgcolor: "#5d4037" }, mr: 1 }}
+                        onClick={() => handleDelete(book.id)}
+                      >
+                        Eliminar
+                      </Button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
           <footer className="footer_Workspace">
             <p className="footer_Workspace_text">
@@ -158,7 +187,7 @@ const ManageBooks = () => {
         </div>
       </div>
 
-      {/* MODAL: AGREGAR LIBRO */}
+      {/* Modal de agregar */}
       <Modal open={openAddModal} onClose={() => setOpenAddModal(false)}>
         <Box
           sx={{
@@ -177,16 +206,26 @@ const ManageBooks = () => {
         </Box>
       </Modal>
 
-      {/* MODAL: EDITAR LIBRO */}
+      {/* Modal de editar */}
       {bookToEdit && (
         <EditBookModal
           open={editModalOpen}
           onClose={() => setEditModalOpen(false)}
           libro={bookToEdit}
-          onUpdate={fetchUserBooks}
+          onUpdate={fetchUserBooks} 
         />
       )}
-    </>
+
+      {/* Modal de descripción */}
+      <BookDetailsModal
+          open={openDetailsModal}
+          onClose={() => setOpenDetailsModal(false)}
+          book={selectedBook}
+        />
+
+      {/* Modal carrito */}
+        <CartModal open={openCartModal} onClose={() => setOpenCartModal(false)} />
+    </div>
   );
 };
 

@@ -11,7 +11,8 @@
 }
 
 .sidebar_title {
-  font-size: 1.4rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8rem;
   margin-bottom: 2.5rem;
   color: #5D4037;
   font-weight: 700;
@@ -45,6 +46,8 @@
 }
 
 .sidebar_link {
+  font-family: 'Poppins', sans-serif; 
+  font-size: 16px;
   display: flex;
   align-items: center;
   gap: 12px;

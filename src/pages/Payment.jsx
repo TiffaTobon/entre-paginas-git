@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../styles/Payment.css";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography
+} from '@mui/material';
+import '../styles/Payment.css';
 
 const Payment = () => {
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
-    lastName: '',
     idNumber: '',
     address: '',
     address2: '',
     city: '',
-    state: 'Antioquia',
     zipCode: '',
     phone: ''
   });
@@ -24,414 +32,223 @@ const Payment = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
+
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePayNow = () => {
     setIsProcessing(true);
     const randomOrderNum = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
     setOrderNumber(randomOrderNum);
-   
     setTimeout(() => {
       setIsProcessing(false);
       setPaymentSuccess(true);
-     
     }, 2000);
   };
 
-  const returnToStore = () => {
-    navigate('/all-books');
-    
-
-  };
+  const returnToStore = () => navigate('/workspace');
 
   if (paymentSuccess) {
     return (
-      <div className="payment-card">
-        <div className="card-header">
-          <h2>¡Pago Exitoso!</h2>
-        </div>
-        
-        <div className="card-body">
-          <div className="success-message">
-            <div className="success-icon">✓</div>
-            <h3>Gracias por tu compra</h3>
-            <p>Tu pago ha sido procesado exitosamente.</p>
-            
-            <div className="order-details">
-              <p><strong>Número de orden:</strong> {orderNumber}</p>
-              <p>Recibirás un correo de confirmación en: {formData.email}</p>
-              <p>Dirección de envío: {formData.address}, {formData.city}</p>
-            </div>
-            
-            <button 
-              className="continue-shopping-btn"
-              onClick={returnToStore}
-            >
-              Regresar al comercio
-            </button>
-          </div>
-        </div>
-      </div>
+      <Box
+        sx={{
+          maxWidth: 500,
+          mx: 'auto',
+          mt: 5,
+          bgcolor: '#f7f7f7',
+          borderRadius: 2,
+          p: 4,
+          boxShadow: 3,
+          fontFamily: 'Outfit, sans-serif'
+        }}
+      >
+        <Typography variant="h5" align="center" gutterBottom>
+          ¡Pago Exitoso!
+        </Typography>
+        <Typography align="center">Gracias por tu compra</Typography>
+        <Typography align="center" sx={{ my: 2 }}>
+          Tu número de orden es <strong>{orderNumber}</strong>
+        </Typography>
+        <Typography align="center">
+          Se enviará confirmación a: {formData.email}
+        </Typography>
+        <Typography align="center">
+          Dirección: {formData.address}, {formData.city}
+        </Typography>
+        <Box display="flex" justifyContent="center" mt={3}>
+          <Button
+            variant="outlined"
+            onClick={returnToStore}
+            sx={{
+              paddingX: 4,
+              paddingY: 1,
+              textTransform: 'uppercase',
+              fontWeight: 600,
+              fontSize: '0.9rem'
+            }}
+          >
+            Regresar al Comercio
+          </Button>
+        </Box>
+      </Box>
     );
   }
 
   return (
-    <div className="payment-card">
-      <div className="card-header">
+    <Box className="payment-card">
+      <Box className="card-header">
         <h2>Finalizar Compra</h2>
-      </div>
-      
-      <div className="card-body">
-        <div className="steps-nav">
-          <button 
-            className={`step-btn ${activeSection === 'contact' ? 'active' : ''}`}
-            onClick={() => setActiveSection('contact')}
-          >
+      </Box>
+
+      <Box className="card-body">
+        <Box className="steps-nav">
+          <button className={`step-btn ${activeSection === 'contact' ? 'active' : ''}`} disabled>
             Contacto
           </button>
-          <button 
+          <button
             className={`step-btn ${activeSection === 'shipping' ? 'active' : ''}`}
-            onClick={() => setActiveSection('shipping')}
             disabled={!formData.email}
+            onClick={() => setActiveSection('shipping')}
           >
             Envío
           </button>
-          <button 
+          <button
             className={`step-btn ${activeSection === 'payment' ? 'active' : ''}`}
-            onClick={() => setActiveSection('payment')}
             disabled={!formData.address || !formData.city}
+            onClick={() => setActiveSection('payment')}
           >
             Pago
           </button>
-        </div>
+        </Box>
 
         {isProcessing && (
-          <div className="processing-overlay">
-            <div className="processing-spinner"></div>
-            <p>Procesando tu pago...</p>
-          </div>
+          <Typography align="center" className="secure-text">
+            Procesando tu pago...
+          </Typography>
         )}
 
         {activeSection === 'contact' && (
-          <div className="section-content">
-            <div className="form-section">
-              <label className="section-label">Correo electrónico</label>
-              <input 
-                type="email" 
-                className="form-input" 
-                placeholder="tucorreo@ejemplo.com"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-              <div className="checkbox-group">
-                <input 
-                  type="checkbox" 
-                  id="emailUpdates" 
-                  checked={emailUpdates} 
-                  onChange={() => setEmailUpdates(!emailUpdates)} 
+          <>
+            <TextField
+              label="Correo electrónico"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={emailUpdates}
+                  onChange={() => setEmailUpdates(!emailUpdates)}
                 />
-                <label htmlFor="emailUpdates">Enviarme novedades y ofertas por correo electrónico</label>
-              </div>
-            </div>
-            
-            <div className="section-footer">
-              <button 
-                className="next-btn" 
+              }
+              label="Deseo recibir novedades por email"
+            />
+            <Box textAlign="right" mt={2}>
+              <Button
+                variant="contained"
+                sx={{ bgcolor: '#5D4037', '&:hover': { bgcolor: '#4a342e' } }}
                 onClick={() => setActiveSection('shipping')}
                 disabled={!formData.email}
               >
-                Continuar al envío
-              </button>
-            </div>
-          </div>
+                Continuar al Envío
+              </Button>
+            </Box>
+          </>
         )}
 
         {activeSection === 'shipping' && (
-          <div className="section-content">
-            <div className="form-section">
-              <div className="form-row">
-                <div className="form-group">
-                  <label>País / Región</label>
-                  <div className="select-wrapper">
-                    <select className="form-input" disabled>
-                      <option>Colombia</option>
-                    </select>
-                    <span className="checkmark">✔</span>
-                  </div>
-                </div>
-              </div>
+          <>
+            <TextField label="Nombre completo" name="firstName" value={formData.firstName} onChange={handleInputChange} fullWidth margin="normal" />
+            <TextField label="Cédula" name="idNumber" value={formData.idNumber} onChange={handleInputChange} fullWidth margin="normal" />
+            <TextField label="Dirección" name="address" value={formData.address} onChange={handleInputChange} fullWidth margin="normal" />
+            <TextField label="Complemento (opcional)" name="address2" value={formData.address2} onChange={handleInputChange} fullWidth margin="normal" />
+            <TextField label="Ciudad" name="city" value={formData.city} onChange={handleInputChange} fullWidth margin="normal" />
+            <TextField label="Código postal (opcional)" name="zipCode" value={formData.zipCode} onChange={handleInputChange} fullWidth margin="normal" />
+            <TextField label="Teléfono" name="phone" value={formData.phone} onChange={handleInputChange} fullWidth margin="normal" />
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Nombre</label>
-                  <input 
-                    type="text" 
-                    className="form-input"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Apellidos</label>
-                  <input 
-                    type="text" 
-                    className="form-input"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Cédula</label>
-                <input 
-                  type="text" 
-                  className="form-input"
-                  name="idNumber"
-                  value={formData.idNumber}
-                  onChange={handleInputChange}
-                  required
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={saveInfo}
+                  onChange={() => setSaveInfo(!saveInfo)}
                 />
-              </div>
+              }
+              label="Guardar mi información para la próxima vez"
+            />
 
-              <div className="form-group">
-                <label>Dirección</label>
-                <input 
-                  type="text" 
-                  className="form-input"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
+            <Typography sx={{ mt: 2, fontWeight: 'bold', color: '#5D4037' }}>
+              Valor domicilio: $8.000
+            </Typography>
 
-              <div className="form-group">
-                <label>Casa, apartamento, etc. (opcional)</label>
-                <input 
-                  type="text" 
-                  className="form-input"
-                  name="address2"
-                  value={formData.address2}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Ciudad</label>
-                  <input 
-                    type="text" 
-                    className="form-input"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Provincia / Estado</label>
-                  <div className="select-wrapper">
-                    <select 
-                      className="form-input"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleInputChange}
-                    >
-                      <option value="Antioquia">Antioquia</option>
-                      <option value="Bogotá">Bogotá</option>
-                      <option value="Valle">Valle</option>
-                      <option value="Santander">Santander</option>
-                    </select>
-                    <span className="checkmark">✔</span>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label>Código postal (opcional)</label>
-                  <input 
-                    type="text" 
-                    className="form-input"
-                    name="zipCode"
-                    value={formData.zipCode}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Teléfono</label>
-                <input 
-                  type="tel" 
-                  className="form-input"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="checkbox-group">
-                <input 
-                  type="checkbox" 
-                  id="saveInfo" 
-                  checked={saveInfo} 
-                  onChange={() => setSaveInfo(!saveInfo)} 
-                />
-                <label htmlFor="saveInfo">Guardar mi información y consultar más rápidamente la próxima vez</label>
-              </div>
-            </div>
-
-            <div className="shipping-section">
-              <h3 className="section-subtitle">Métodos de envío</h3>
-              <div className="shipping-method">
-                <div className="method-row">
-                  <div className="method-name">Standard</div>
-                  <div className="method-price">$ 16.000,00</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="section-footer">
-              <button 
-                className="back-btn" 
-                onClick={() => setActiveSection('contact')}
-              >
+            <Box display="flex" justifyContent="space-between" mt={3}>
+              <Button variant="outlined" onClick={() => setActiveSection('contact')}>
                 Volver
-              </button>
-              <button 
-                className="next-btn" 
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ bgcolor: '#5D4037', '&:hover': { bgcolor: '#4a342e' } }}
                 onClick={() => setActiveSection('payment')}
                 disabled={!formData.address || !formData.city || !formData.phone}
               >
-                Continuar al pago
-              </button>
-            </div>
-          </div>
+                Continuar al Pago
+              </Button>
+            </Box>
+          </>
         )}
 
         {activeSection === 'payment' && (
-          <div className="section-content">
-            <div className="payment-section">
-              <p className="secure-text">Todas las transacciones son seguras y están encriptadas.</p>
+          <>
+            <Typography className="secure-text">
+              Todas las transacciones son seguras y están encriptadas.
+            </Typography>
 
-              <div className="payment-methods">
-                <div className="payment-option">
-                  <input 
-                    type="radio" 
-                    id="epayco" 
-                    name="paymentMethod" 
-                    checked={paymentMethod === 'epayco'} 
-                    onChange={() => setPaymentMethod('epayco')} 
-                  />
-                  <label htmlFor="epayco">
-                    <div className="payment-label">ePayco</div>
-                    <div className="payment-icons">
-                      <span>VISA</span>
-                      <span>+3</span>
-                    </div>
-                  </label>
-                </div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={sameBilling}
+                  onChange={() => setSameBilling(!sameBilling)}
+                />
+              }
+              label="La dirección de facturación es igual a la de envío"
+            />
 
-                <div className="payment-option">
-                  <input 
-                    type="radio" 
-                    id="addi" 
-                    name="paymentMethod" 
-                    checked={paymentMethod === 'addi'} 
-                    onChange={() => setPaymentMethod('addi')} 
-                  />
-                  <label htmlFor="addi">
-                    <div className="payment-label">Addi</div>
-                    <div className="payment-icons">
-                      <span>Addi</span>
-                    </div>
-                  </label>
-                </div>
+            <Typography sx={{ mt: 2, mb: 1, fontWeight: 'bold', color: '#5D4037' }}>
+              Método de pago
+            </Typography>
 
-                <div className="payment-option">
-                  <input 
-                    type="radio" 
-                    id="supay" 
-                    name="paymentMethod" 
-                    checked={paymentMethod === 'supay'} 
-                    onChange={() => setPaymentMethod('supay')} 
-                  />
-                  <label htmlFor="supay">
-                    <div className="payment-label">Su + Pay</div>
-                    <div className="payment-icons">
-                      <span>VISA</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
-            </div>
+            <RadioGroup
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            >
+              <FormControlLabel value="epayco" control={<Radio />} label="ePayco" />
+              <FormControlLabel value="addi" control={<Radio />} label="Addi" />
+              <FormControlLabel value="supay" control={<Radio />} label="Su + Pay" />
+            </RadioGroup>
 
-            <div className="billing-section">
-              <h3 className="section-subtitle">Dirección de facturación</h3>
-              
-              <div className="billing-options">
-                <div className="checkbox-group">
-                  <input 
-                    type="radio" 
-                    id="sameBilling" 
-                    name="billingAddress" 
-                    checked={sameBilling} 
-                    onChange={() => setSameBilling(true)} 
-                  />
-                  <label htmlFor="sameBilling">
-                    La misma dirección de envío
-                    <div className="payment-icons">
-                      <span>VISA</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div className="checkbox-group">
-                  <input 
-                    type="radio" 
-                    id="differentBilling" 
-                    name="billingAddress" 
-                    checked={!sameBilling} 
-                    onChange={() => setSameBilling(false)} 
-                  />
-                  <label htmlFor="differentBilling">Usar una dirección de facturación distinta</label>
-                </div>
-              </div>
-            </div>
-            
-            <div className="section-footer">
-              <button 
-                className="back-btn" 
-                onClick={() => setActiveSection('shipping')}
-              >
+            <Box display="flex" justifyContent="space-between" mt={3}>
+              <Button variant="outlined" onClick={() => setActiveSection('shipping')}>
                 Volver
-              </button>
-              <button 
-                className="pay-now-btn"
+              </Button>
+              <Button
+                variant="contained"
                 onClick={handlePayNow}
                 disabled={isProcessing}
+                sx={{ bgcolor: '#5D4037', '&:hover': { bgcolor: '#4a342e' } }}
               >
-                {isProcessing ? 'Procesando...' : 'Pagar ahora'}
-              </button>
-            </div>
-          </div>
+                {isProcessing ? 'Procesando...' : 'Pagar Ahora'}
+              </Button>
+            </Box>
+          </>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

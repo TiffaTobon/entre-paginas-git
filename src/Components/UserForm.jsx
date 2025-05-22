@@ -15,7 +15,6 @@ const UserForm = ({ onSubmit, onClose, mode = "register", initialValues = {} }) 
 
   const [formData, setFormData] = useState({
     nombres: initialValues.nombres || "",
-    apellidos: initialValues.apellidos || "",
     email: initialValues.email || "",
     password: "",
     confirmarPassword: "",
@@ -35,9 +34,6 @@ const UserForm = ({ onSubmit, onClose, mode = "register", initialValues = {} }) 
   const validar = () => {
     const newErrors = {};
     if (formData.nombres.length < 2) newErrors.nombres = "Nombre inválido";
-    if (formData.apellidos.length < 2 && mode === "register") newErrors.apellidos = "Apellido inválido";
-    if (!formData.email.includes("@")) newErrors.email = "Email inválido";
-
     if (mode === "register" || formData.password) {
       if (formData.password.length < 6) newErrors.password = "Mínimo 6 caracteres";
       if (formData.password !== formData.confirmarPassword)
@@ -52,12 +48,14 @@ const UserForm = ({ onSubmit, onClose, mode = "register", initialValues = {} }) 
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validar()) {
-      const { confirmarPassword, ...data } = formData;
-      onSubmit(data);
-    }
-  };
+  e.preventDefault();
+    const esValido = validar();
+
+  if (esValido) {
+    const { confirmarPassword, ...data } = formData;
+    onSubmit(data);
+  }
+};
 
   return (
     <Box
@@ -72,6 +70,13 @@ const UserForm = ({ onSubmit, onClose, mode = "register", initialValues = {} }) 
 >
 
   <Box component="form" onSubmit={handleSubmit}>
+    <Typography
+        variant="h5"
+        align="center"
+        sx={{ color: "#5a3c33", fontWeight: "bold", marginBottom: 2 }}
+      >
+        {mode === "edit" ? "Editar Perfil" : "Registrarse"}
+      </Typography>
     <Stack spacing={2}>
       <TextField
         label="Nombre completo"
@@ -152,11 +157,14 @@ const UserForm = ({ onSubmit, onClose, mode = "register", initialValues = {} }) 
         {mode === "edit" ? "Guardar Cambios" : "Registrar"}
       </Button>
 
-      <Button variant="outlined" onClick={() => {
-        if (onClose) onClose();
-        navigate("/workspace");
-      }}>
-        Volver al Inicio
+     <Button
+        variant="outlined"
+        onClick={() => {
+          if (onClose) onClose();
+          navigate(mode === "edit" ? "/workspace" : "/");
+        }}
+      >
+        {mode === "edit" ? "Volver al Inicio" : "Volver al Inicio"}
       </Button>
     </Stack>
   </Box>

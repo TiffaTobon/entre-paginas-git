@@ -32,7 +32,7 @@ const BookDetailsModal = ({ open, onClose, book }) => {
           Autor: {book.autor}
         </Typography>
         <Typography variant="body1" sx={{ mt: 2 }}>
-          {book.descripcion}
+          {book.descripcion || "Este libro no tiene descripción."}
         </Typography>
       </Box>
     </Modal>

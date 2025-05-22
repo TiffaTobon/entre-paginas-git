@@ -119,3 +119,18 @@
     margin: 40px auto;
   }
   
+  .footer_Workspace {
+  background-color: #F4E1C1;
+  color: #5D4037;
+  text-align: center;
+  padding: 20px 10px;
+  margin-top: 20px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.footer_Workspace_text {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}

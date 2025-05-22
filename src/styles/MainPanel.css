@@ -203,17 +203,20 @@ margin-bottom: 30px;
   font-weight: 400; 
   color: #5D4037; 
   line-height: 1.6; 
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 /* ===== Footer ===== */
 .footer_MainPanel {
-  text-align: center;
-  padding: 10px;
+  font-family: 'Outfit', sans-serif;
   background-color: #F4E1C1;
-  font-weight: bold;
   color: #5D4037;
+  text-align: center;
+  padding: 25px 10px; /* altura igual o más alta que WorkSpace */
+  margin-top: 20px;
+  font-weight: 800;
+  font-size: 14px;
   width: 100%;
 }
 
