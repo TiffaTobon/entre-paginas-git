@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../Components/Header";
 import BookCards from "../Components/BookCards";
 import "../styles/WorkSpace.css";
+import { Button } from "@mui/material";
 
 const AllBooks = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,9 +17,13 @@ const AllBooks = () => {
         <BookCards searchTerm={searchTerm} showPagination={true} />
 
         <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <button className="btn-secondary" onClick={() => navigate("/workspace")}>
-            ← Volver
-          </button>
+          <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => navigate("/workspace")}
+              >
+                Volver Al Inicio
+              </Button>
         </div>
       </div>
     </>

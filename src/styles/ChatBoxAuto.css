@@ -1,0 +1,82 @@
+.chatbox-container {
+  display: flex;
+  flex-direction: column;
+  height: 240px; /* REDUCIDO */
+  max-width: 100%;
+  background-color: #fff;
+  border-radius: 12px;
+  border: 1px solid #d8cfc5;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 0.9rem;
+  overflow: hidden;
+}
+
+.chatbox-header {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #5d4037;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.chatbox-messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 0.8rem;
+  padding-right: 4px;
+}
+
+.message {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  max-width: 85%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+}
+
+.message.usuario {
+  background-color: #f1e9e1;
+  align-self: flex-end;
+  text-align: right;
+  color: #3e2723;
+}
+
+.message.bot {
+  background-color: #f9f9f9;
+  align-self: flex-start;
+  text-align: left;
+  color: #4e342e;
+  border-left: 4px solid #a1887f;
+}
+
+.chatbox-input {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.chatbox-input input {
+  flex: 1;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.chatbox-input button {
+  background-color: #8d6e63;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.chatbox-input button:hover {
+  background-color: #6d4c41;
+}

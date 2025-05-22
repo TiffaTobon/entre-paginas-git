@@ -1,49 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/UserBooks.css";
-import placeholderImage from "../assets/Images/placeholder-book.jpg";
+import { jwtDecode } from "jwt-decode";
+import { Modal, Box, Button} from "@mui/material";
+import axios from "axios";
+import Header from "../Components/Header";
+import Sidebar from "../Components/Sidebar";
 import AddBook from "./AddBook";
-import { Modal, Box } from "@mui/material";
+import EditBookModal from "../../Admin/EditBookModal";
+import placeholderImage from "../assets/Images/placeholder-book.jpg";
+import defaultImage from "../assets/Images/portadaDefecto.png";
+import "../styles/UserBooks.css";
+
 
 const ManageBooks = () => {
   const [books, setBooks] = useState([]);
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [bookToEdit, setBookToEdit] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const fetchUserBooks = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3000/api/mis-libros", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const userId = localStorage.getItem("usuario_id");
+      if (!token || !userId) return;
+
+      const res = await fetch(`http://localhost:3000/libros/librosUsuario/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!response.ok) throw new Error("Error al obtener libros");
+      if (!res.ok) throw new Error("Error al obtener libros");
 
-      const data = await response.json();
-      setBooks(data.datos);
+      const data = await res.json();
+      setBooks(data.datos || []);
     } catch (error) {
       console.error("Error al obtener libros:", error);
     }
   };
 
-  useEffect(() => {
-    fetchUserBooks();
-  }, []);
-
   const handleDelete = async (id) => {
     const confirm = window.confirm("¿Estás seguro de eliminar este libro?");
     if (!confirm) return;
 
-    // Eliminar en tu backend (ajústalo si usas Firebase)
     try {
       const token = localStorage.getItem("token");
       await fetch(`http://localhost:3000/libros/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setBooks((prev) => prev.filter((book) => book.id !== id));
     } catch (error) {
@@ -51,58 +56,109 @@ const ManageBooks = () => {
     }
   };
 
+  const openEditModal = (book) => {
+    setBookToEdit(book);
+    setEditModalOpen(true);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const decoded = jwtDecode(token);
+      if (decoded.email === "adminentrepaginas@gmail.com") setIsAdmin(true);
+    } catch (e) {
+      console.error("Error decodificando token:", e);
+    }
+
+    fetchUserBooks();
+  }, []);
+
   return (
-    <div className="user-books-section">
-      <div
-        className="manage-books-header"
-        style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-      >
-        <h2>Mis Libros</h2>
-        <button className="btn-secondary" onClick={() => navigate("/workspace")}>
-          ← Volver
-        </button>
+    <>
+      <Header
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        isAdmin={isAdmin}
+      />
+
+      <div className="workspace_container">
+        <Sidebar isAdmin={isAdmin} />
+
+        <div className="workspace_content_wrapper">
+          <div className="manage-books-header">
+            <h2 className="user-books-title">Mis Libros</h2>
+            <div className="manage-books-buttons">
+              <Button
+                variant="contained"
+                sx={{ bgcolor: "#6d4c41", '&:hover': { bgcolor: "#5d4037" }, mr: 1 }}
+                onClick={() => setOpenAddModal(true)}
+              >
+                Agregar Libro
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => navigate("/workspace")}
+              >
+                Volver Al Inicio
+              </Button>
+            </div>
+          </div>
+
+          {books.length === 0 ? (
+            <div className="empty-book-card">
+              <h3>No tienes libros agregados.</h3>
+              <p>Haz clic en "Agregar Libro" para crear uno nuevo.</p>
+            </div>
+          ) : (
+            <ul className="user-book-list">
+              {books.map((book) => (
+                <li key={book.id} className="user-book-card">
+                  <img
+                  src={
+                  book.imagen && book.imagen !== "null" && book.imagen.trim() !== ""
+                    ? `http://localhost:3000/uploads/${book.imagen}`
+                    : defaultImage
+                }
+                  alt={book.titulo}
+                  className="bookcards-image"
+                />
+                  <h4>{book.titulo}</h4>
+                  <p><strong>Autor:</strong> {book.autor}</p>
+                  <p><strong>Precio:</strong> {book.precio}</p>
+                  <p>{book.descripcion}</p>
+                  <div className="user-book-actions">
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => openEditModal(book)}
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      sx={{ bgcolor: "#6d4c41", '&:hover': { bgcolor: "#5d4037" }, mr: 1 }}
+                      onClick={() => handleDelete(book.id)}
+                    >
+                      Eliminar
+                    </Button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <footer className="footer_Workspace">
+            <p className="footer_Workspace_text">
+              © Todos los derechos reservados - Entre Páginas 2025
+            </p>
+          </footer>
+        </div>
       </div>
 
-      <button
-        className="btn-primary"
-        style={{ marginBottom: "20px" }}
-        onClick={() => setOpenAddModal(true)}
-      >
-        ➕ Agregar Libro
-      </button>
-
-      {books.length === 0 ? (
-        <div className="empty-book-card">
-          <h3> Aún no tienes libros</h3>
-          <p>Haz clic en el botón para agregar tu primer libro.</p>
-        </div>
-      ) : (
-        <ul className="user-book-list">
-          {books.map((book) => (
-            <li key={book.id} className="user-book-card">
-              <img
-                src={book.imagen ? book.imagen : placeholderImage}
-                alt={book.titulo}
-                className="bookcards-image"
-              />
-              <h4>{book.titulo}</h4>
-              <p><strong>Autor:</strong> {book.autor}</p>
-              <p><strong>Categoría:</strong> {book.categoria}</p>
-              <p>{book.descripcion}</p>
-              <div className="user-book-actions">
-                <button className="btn-edit" onClick={() => navigate(`/edit-book/${book.id}`)}>
-                  Editar
-                </button>
-                <button className="btn-delete" onClick={() => handleDelete(book.id)}>
-                  Eliminar
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {/* MODAL DE AGREGAR LIBRO */}
+      {/* MODAL: AGREGAR LIBRO */}
       <Modal open={openAddModal} onClose={() => setOpenAddModal(false)}>
         <Box
           sx={{
@@ -117,13 +173,20 @@ const ManageBooks = () => {
             p: 4,
           }}
         >
-          <AddBook
-            onClose={() => setOpenAddModal(false)}
-            onSuccess={fetchUserBooks} 
-          />
+          <AddBook onClose={() => setOpenAddModal(false)} onSuccess={fetchUserBooks} />
         </Box>
       </Modal>
-    </div>
+
+      {/* MODAL: EDITAR LIBRO */}
+      {bookToEdit && (
+        <EditBookModal
+          open={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          libro={bookToEdit}
+          onUpdate={fetchUserBooks}
+        />
+      )}
+    </>
   );
 };
 

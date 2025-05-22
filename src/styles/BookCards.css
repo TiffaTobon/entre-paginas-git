@@ -126,3 +126,18 @@
   display: flex;
   
 }
+
+.ver-mas-button {
+  background: none;
+  border: none;
+  color: #6d4c41;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.ver-mas-button:hover {
+  color: #5a3c33;
+}

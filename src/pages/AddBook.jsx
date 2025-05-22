@@ -73,13 +73,14 @@ const AddBook = ({ onClose, onSuccess }) => {
         <TextField label="Título" name="titulo" required fullWidth onChange={handleChange} />
         <TextField label="Autor" name="autor" required fullWidth onChange={handleChange} />
         <TextField
-          label="Descripción"
           name="descripcion"
-          required
-          multiline
-          rows={3}
-          fullWidth
+          label="Descripción"
+          value={formData.descripcion}
           onChange={handleChange}
+          inputProps={{ maxLength: 150 }}
+          helperText={`${formData.descripcion.length}/100 caracteres`}
+          multiline
+          fullWidth
         />
         <TextField label="Precio (COP)" name="precio" type="number" required fullWidth onChange={handleChange} />
         <TextField label="Stock" name="stock" type="number" required fullWidth onChange={handleChange} />
