@@ -11,7 +11,6 @@
   margin-bottom: 20px;
 }
 
-
 .manage-books-header {
   display: flex;
   flex-direction: column;
@@ -56,6 +55,17 @@
   color: #5D4037;
 }
 
+.book-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.book-image img {
+  max-width: 100%;
+  height: auto;
+}
 .user-book-actions {
   margin-top: 15px;
   display: flex;
@@ -139,4 +149,14 @@
   gap: 15px;
   margin-top: 10px;
   margin-bottom: 20px;
+}
+
+.estado-libro.activo {
+  color: green;
+  font-weight: bold;
+}
+
+.estado-libro.inactivo {
+  color: red;
+  font-weight: bold;
 }

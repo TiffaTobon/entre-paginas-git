@@ -54,7 +54,7 @@
 
 .search_btn_header {
   background-color: #5D4037;
-  color: white;
+  color: #F4E1C1 !important;
   border: none;
   padding: 14px 20px;
   font-weight: bold;

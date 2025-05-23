@@ -2,16 +2,19 @@ import React, { useEffect, useState } from "react";
 import "../styles/BookCards.css";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
 import defaultImage from "../assets/Images/portadaDefecto.png";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaExchangeAlt  } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import BookDetailsModal from "./BookDetailsModal";
+import { Tooltip } from "@mui/material";
+import ExchangeModal from "./ExchangeModal";
 
 const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) => {
+  
   const { addToCart } = useCart();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [selectedBook, setSelectedBook] = useState(null);
+  const [openExchange, setOpenExchange] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = (book) => {
@@ -24,6 +27,15 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
     setOpenModal(false);
   };
 
+    const handleExchangeClick = (book) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      if (onOpenLogin) onOpenLogin();
+      return;
+    }
+    setSelectedBook(book); // reutiliza el mismo selectedBook
+    setOpenExchange(true);
+  };
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -57,14 +69,14 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
         {books.map((book, index) => (
           <li key={index} className="bookcards-item">
             <img
-                              src={
-                              book.imagen && book.imagen !== "null" && book.imagen.trim() !== ""
-                                ? `http://localhost:3000/uploads/${book.imagen}`
-                                : defaultImage
-                            }
-                              alt={book.titulo}
-                              className="bookcards-image"
-                            />
+              src={
+                book.imagen && book.imagen !== "null" && book.imagen.trim() !== ""
+                  ? `http://localhost:3000/uploads/${book.imagen}`
+                  : defaultImage
+              }
+              alt={book.titulo}
+              className="bookcards-image"
+            />
             <h4>{book.titulo}</h4>
             <p>{book.autor}</p>
             <p className="precio">${book.precio}</p>
@@ -75,37 +87,58 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
             >
               Ver descripción
             </button>
-            <button
-              onClick={() => {
-                const token = localStorage.getItem("token");
-                if (!token) {
-                  if (onOpenLogin) onOpenLogin(); //Abre el modal de login si no hay token
-                  return;
-                }
 
-                addToCart({
-                  id: book.id,
-                  title: book.titulo,
-                  author: book.autor,
-                  price: book.precio,
-                  image: book.imagen
-                    ? `http://localhost:3000/uploads/${book.imagen}`
-                    : placeholderImage,
-                });
-              }}
-              className="buy-button"
-            >
-              <FaShoppingCart style={{ marginRight: "6px" }} />
-              Añadir al carrito
-            </button>
+           <div className="bookcard-buttons">
+              <Tooltip title="Intercambiar">
+                <button
+                  className="icon-button interchange-button"
+                  onClick={() => handleExchangeClick(book)}
+                >
+                  <FaExchangeAlt />
+                </button>
+              </Tooltip>
+
+              <Tooltip title="Añadir al carrito">
+                <button
+                  className="icon-button buy-button"
+                  onClick={() => {
+                    const token = localStorage.getItem("token");
+                    if (!token) {
+                      if (onOpenLogin) onOpenLogin();
+                      return;
+                    }
+
+                    addToCart({
+                      id: book.id,
+                      title: book.titulo,
+                      author: book.autor,
+                      price: book.precio,
+                      image: book.imagen
+                        ? `http://localhost:3000/uploads/${book.imagen}`
+                        : placeholderImage,
+                      stock: book.stock,
+                      quantity: 1
+                    });
+                  }}
+                >
+                  <FaShoppingCart />
+                </button>
+              </Tooltip>
+            </div>
           </li>
         ))}
       </ul>
       <BookDetailsModal
-          open={openModal}
-          onClose={handleCloseModal}
-          book={selectedBook}
-        />
+        open={openModal}
+        onClose={handleCloseModal}
+        book={selectedBook}
+      />
+      <ExchangeModal
+        open={openExchange}
+        onClose={() => setOpenExchange(false)}
+        book={selectedBook}
+        onSend={(msg) => console.log("Mensaje enviado:", msg)}
+      />
     </>
   );
 };

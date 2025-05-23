@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { db } from "../Firebase";
 
 const EditBook = () => {
-  const { id } = useParams(); // <- este ID viene de la URL
+  const { id } = useParams(); 
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({

@@ -61,8 +61,8 @@ const MainPanel = () => {
   };
 
   const handleRegister = async (formData) => {
-    const { nombres, apellidos, email, password } = formData;
-    const nombre = `${nombres} ${apellidos}`.trim();
+    const { nombres, email, password } = formData;
+    const nombre = nombres.trim();
 
     try {
       const response = await axios.post("http://localhost:3000/auth/register", {

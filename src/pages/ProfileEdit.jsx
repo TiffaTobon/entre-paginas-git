@@ -3,40 +3,44 @@ import { useNavigate } from "react-router-dom";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 import EditProfileModal from "../Components/EditProfileModal";
+import bannerLibro from "../assets/Images/bannerlibro.png";
+import "../styles/WorkSpace.css";
+import "../styles/Header.css";
 
 const EditProfile = () => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
 
-  // Abrir el modal automáticamente al cargar la página
   useEffect(() => {
     setOpenModal(true);
   }, []);
 
   return (
-    <>
-      <Header />
-      <div className="workspace_container">
-        <Sidebar />
-        <div className="workspace_content_wrapper">
-          {/* Modal que se abre automáticamente */}
-          <EditProfileModal
-            open={openModal}
-            onClose={() => navigate("/workspace")} // Al cerrar, regresar a vista principal
-            onSuccess={() => {
-              // acción opcional luego de editar
-              console.log("Perfil actualizado");
-            }}
-          />
+    <div className="workspace-layout">
+  <Header />
+  <div className="workspace-container"> 
+    <Sidebar />
+    <div className="workspace_content_wrapper"> 
+      <img
+        src={bannerLibro}
+        alt="Banner Libros"
+        className="workspace_banner"
+      />
 
-          <footer className="footer_Workspace">
-            <p className="footer_Workspace_text">
-              © Todos los derechos reservados - Entre Páginas 2025
-            </p>
-          </footer>
-        </div>
-      </div>
-    </>
+      <EditProfileModal
+        open={openModal}
+        onClose={() => navigate("/workspace")}
+        onSuccess={() => console.log("Perfil actualizado")}
+      />
+
+      <footer className="footer_Workspace">
+        <p className="footer_Workspace_text">
+          © Todos los derechos reservados - Entre Páginas 2025
+        </p>
+      </footer>
+    </div>
+  </div>
+</div>
   );
 };
 

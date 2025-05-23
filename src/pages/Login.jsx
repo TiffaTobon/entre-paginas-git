@@ -39,7 +39,11 @@ const Login = ({ onClose, onSwitchToRegister }) => {
 
   return (
     <Box component="form" onSubmit={handleLogin}>
-      <Typography variant="h5" gutterBottom textAlign="center">
+      <Typography
+              variant="h5"
+              align="center"
+              sx={{ color: "#5a3c33", fontWeight: "bold", marginBottom: 2 }}
+            >
         Iniciar Sesión
       </Typography>
 

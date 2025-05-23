@@ -58,24 +58,6 @@ const Sidebar = ({ isAdmin, onSelectView }) => {
                 <FaEdit className="sidebar_icon" /> Mis Libros
               </Link>
             </li>
-            <li>
-              <Link
-                to="/manage-books"
-                className="sidebar_link"
-                data-tooltip="Intercambiar libros"
-              >
-                <FaExchangeAlt className="sidebar_icon" /> Intercambiar
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/manage-books"
-                className="sidebar_link"
-                data-tooltip="Vender libros"
-              >
-                <FaSellcast className="sidebar_icon" /> Vender
-              </Link>
-            </li>
           </>
         )}
       </ul>

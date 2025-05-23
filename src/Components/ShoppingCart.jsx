@@ -1,9 +1,9 @@
-import React from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
 import "../styles/ShoppingCart.css";
-import { FiTrash2, FiArrowLeft, FiShoppingCart } from "react-icons/fi";
+import { FiTrash2, FiShoppingCart } from "react-icons/fi";
+import { Button } from "@mui/material";
 
 const ShoppingCart = ({ onClose }) => {
   const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
@@ -30,8 +30,9 @@ const ShoppingCart = ({ onClose }) => {
   return (
     <div className="shopping-cart">
       <div className="cart-header">
-        <h2>
-          <FiShoppingCart /> Carrito de Compras
+        <h2 className="cart-title">
+          <FiShoppingCart style={{ marginRight: "8px" }} />
+          Carrito de Compras
         </h2>
         {onClose && (
           <button className="close-button" onClick={onClose}>
@@ -43,12 +44,20 @@ const ShoppingCart = ({ onClose }) => {
       {cartItems.length === 0 ? (
         <div className="empty-cart">
           <p>Tu carrito está vacío.</p>
-          <button 
-            className="continue-shopping-button" 
+
+          <Button
+            variant="outlined"
+            fullWidth
             onClick={onClose || (() => navigate('/all-books'))}
+            sx={{
+              fontFamily: 'Outfit, sans-serif',
+              padding: "10px 12px",
+              marginTop: 2
+            }}
           >
-            Continuar comprando
-          </button>
+            Seguir Comprando
+          </Button>
+
         </div>
       ) : (
         <>
@@ -77,7 +86,7 @@ const ShoppingCart = ({ onClose }) => {
                     <span>{book.quantity || 1}</span>
                     <button 
                       onClick={() => handleQuantityChange(index, (book.quantity || 1) + 1)}
-                      disabled={(book.quantity || 1) >= 10}
+                      disabled={(book.quantity || 1) >= book.stock}
                     >
                       +
                     </button>
@@ -124,30 +133,50 @@ const ShoppingCart = ({ onClose }) => {
           </div>
 
           <div className="cart-actions">
-            <button 
-              onClick={clearCart} 
-              className="secondary-button"
-              disabled={cartItems.length === 0}
-            >
-              Vaciar carrito
-            </button>
-            <button 
-              onClick={handleBuy} 
-              className="primary-button"
-              disabled={cartItems.length === 0}
-            >
-              Proceder al pago
-            </button>
-          </div>
+          <Button
+          variant="outlined"
+          onClick={clearCart}
+          fullWidth
+          sx={{
+            fontFamily: 'Outfit, sans-serif',
+            padding: "10px 16px"
+          }}
+          disabled={cartItems.length === 0}
+        >
+          Vaciar carrito
+        </Button>
 
-          {onClose && (
-            <button 
-              className="continue-shopping-button" 
-              onClick={onClose}
-            >
-              <FiArrowLeft /> Seguir comprando
-            </button>
-          )}
+          <Button
+            variant="contained"
+            onClick={handleBuy}
+            fullWidth
+            sx={{
+              fontFamily: 'Outfit, sans-serif',
+              padding: "10px 16px",
+              backgroundColor: "#5D4037",
+              '&:hover': { backgroundColor: "#4e342e" }
+            }}
+            disabled={cartItems.length === 0}
+          >
+            Proceder al pago
+          </Button>
+</div>
+
+      {onClose && (
+        <Button
+        variant="outlined"
+        fullWidth
+        onClick={onClose}
+        sx={{
+          fontFamily: 'Outfit, sans-serif',
+          marginTop: 2,
+          padding: "10px 12px"
+        }}
+      >
+        Seguir comprando
+      </Button>
+      )}
+
         </>
       )}
     </div>

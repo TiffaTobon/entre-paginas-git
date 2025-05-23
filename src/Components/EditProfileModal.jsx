@@ -83,10 +83,6 @@ const EditProfileModal = ({ open, onClose, onSuccess }) => {
           <CloseIcon />
         </IconButton>
 
-        <Typography variant="h5" textAlign="center" sx={{ mb: 3, color: "#4e342e", fontWeight: "bold" }}>
-          Editar Perfil
-        </Typography>
-
         {initialData ? (
           <UserForm
             onSubmit={handleEdit}
