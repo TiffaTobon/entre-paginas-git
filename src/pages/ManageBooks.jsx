@@ -62,16 +62,33 @@ const ManageBooks = () => {
     }
   };
 
+  const handleToggleStock = async (book) => {
+    try {
+      const token = localStorage.getItem("token");
+      const nuevoEstado = !book.activo;
+      await fetch(`http://localhost:3000/libros/${book.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ activo: nuevoEstado, stock: nuevoEstado ? 1 : 0 }),
+      });
+      fetchUserBooks();
+    } catch (error) {
+      console.error("Error al actualizar estado del libro:", error);
+    }
+  };
+
   const openEditModal = (book) => {
     setBookToEdit(book);
     setEditModalOpen(true);
   };
 
   const openDetails = (book) => {
-  setSelectedBook(book);
-  setOpenDetailsModal(true);
-};
-
+    setSelectedBook(book);
+    setOpenDetailsModal(true);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -136,23 +153,25 @@ const ManageBooks = () => {
               <ul className="user-book-list">
                 {books.map((book) => (
                   <li key={book.id} className="user-book-card">
-                    <img
-                      src={
-                        book.imagen && book.imagen !== "null" && book.imagen.trim() !== ""
-                          ? `http://localhost:3000/uploads/${book.imagen}`
-                          : defaultImage
-                      }
-                      alt={book.titulo}
-                      className="bookcards-image"
-                      onClick={() => openDetails(book)}
-                      style={{ cursor: "pointer" }}
-                    />
+                    <div className="book-image">
+                      <img
+                        src={
+                          book.imagen && book.imagen !== "null" && book.imagen.trim() !== ""
+                            ? `http://localhost:3000/uploads/${book.imagen}`
+                            : defaultImage
+                        }
+                        alt={book.titulo}
+                        className="bookcards-image"
+                        onClick={() => openDetails(book)}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </div>
                     <h4>{book.titulo}</h4>
                     <p><strong>Autor:</strong> {book.autor}</p>
                     <p><strong>Precio:</strong> {book.precio}</p>
                     <p className={`estado-libro ${book.activo ? 'activo' : 'inactivo'}`}>
-                        {book.activo ? 'Disponible' : 'Vendido / No disponible'}
-                      </p>
+                      {book.activo ? 'Disponible' : 'Vendido / No disponible'}
+                    </p>
                     <p
                       onClick={() => openDetails(book)}
                       style={{ cursor: "pointer", textDecoration: "underline", color: "#5D4037" }}
@@ -164,15 +183,30 @@ const ManageBooks = () => {
                         variant="outlined"
                         color="primary"
                         onClick={() => openEditModal(book)}
+                        disabled={!book.activo}
                       >
                         Editar
                       </Button>
                       <Button
                         variant="contained"
-                        sx={{ bgcolor: "#6d4c41", '&:hover': { bgcolor: "#5d4037" }, mr: 1 }}
+                        sx={{
+                          bgcolor: book.activo ? "#6d4c41" : "#ccc",
+                          '&:hover': { bgcolor: book.activo ? "#5d4037" : "#ccc" }
+                        }}
                         onClick={() => handleDelete(book.id)}
+                        disabled={!book.activo}
                       >
                         Eliminar
+                      </Button>
+                      <Button
+                        variant="contained"
+                        sx={{ bgcolor: '#FFC107', color: '#5D4037', '&:hover': {
+                          bgcolor: '#FFB300'
+                        }
+                      }}
+                        onClick={() => handleToggleStock(book)}
+                      >
+                        {book.activo ? 'SEPARAR' : 'SEPARADO'}
                       </Button>
                     </div>
                   </li>
@@ -189,7 +223,6 @@ const ManageBooks = () => {
         </div>
       </div>
 
-      {/* Modal de agregar */}
       <Modal open={openAddModal} onClose={() => setOpenAddModal(false)}>
         <Box
           sx={{
@@ -208,7 +241,6 @@ const ManageBooks = () => {
         </Box>
       </Modal>
 
-      {/* Modal de editar */}
       {bookToEdit && (
         <EditBookModal
           open={editModalOpen}
@@ -218,15 +250,13 @@ const ManageBooks = () => {
         />
       )}
 
-      {/* Modal de descripción */}
       <BookDetailsModal
-          open={openDetailsModal}
-          onClose={() => setOpenDetailsModal(false)}
-          book={selectedBook}
-        />
+        open={openDetailsModal}
+        onClose={() => setOpenDetailsModal(false)}
+        book={selectedBook}
+      />
 
-      {/* Modal carrito */}
-        <CartModal open={openCartModal} onClose={() => setOpenCartModal(false)} />
+      <CartModal open={openCartModal} onClose={() => setOpenCartModal(false)} />
     </div>
   );
 };

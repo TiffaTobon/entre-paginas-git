@@ -1,172 +1,181 @@
-import React, { useEffect, useState } from "react";
-import Header from "../Components/Header";
-import Sidebar from "../Components/Sidebar";
-import { jwtDecode } from "jwt-decode";
+// Paso 1: Agregar notificaciones para mensajes nuevos
+
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import placeholderImage from "../assets/Images/placeholder-book.jpg";
-import "../styles/UserBooks.css";
-import BookDetailsModal from "../Components/BookDetailsModal";
+import logo from "../assets/Images/logoEntrePaginas.jpg";
+import { FaShoppingCart } from "react-icons/fa";
+import { FiMessageSquare } from "react-icons/fi";
+import { useCart } from "../context/CartContext";
+import { Modal, Box, TextField, Button, Typography, Badge } from "@mui/material";
 
-const UserBooks = () => {
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedBook, setSelectedBook] = useState(null);
-  const [books, setBooks] = useState([]);
-  const [openDetailsModal, setOpenDetailsModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+const Header = ({ searchTerm, onSearchChange, onOpenCart, isAdmin }) => {
   const navigate = useNavigate();
+  const { cartCount } = useCart();
+  const [openMessagesModal, setOpenMessagesModal] = useState(false);
+  const [allMessages, setAllMessages] = useState([]);
+  const [replyText, setReplyText] = useState("");
+  const [newMessageCount, setNewMessageCount] = useState(0);
 
-  //Abrir modal con detalles
-  const handleOpenModal = (book) => {
-    setSelectedBook(book);
-    setOpenModal(true);
+  const userId = localStorage.getItem("usuario_id");
+  const token = localStorage.getItem("token");
+
+  const handleLogout = () => {
+    if (window.confirm("¿Está seguro que desea cerrar sesión?")) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("usuario_id");
+      navigate("/");
+    }
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/mensajes/receptor/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      const enviados = await fetch(`http://localhost:3000/mensajes`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const enviadosData = await enviados.json();
+      const propios = enviadosData.filter(m => m.emisor_id == userId || m.receptor_id == userId);
+      setAllMessages(propios);
+      const nuevos = data.filter(m => !m.visto);
+      setNewMessageCount(nuevos.length);
+    } catch (err) {
+      console.error("Error al cargar mensajes:", err);
+    }
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const decoded = jwtDecode(token);
-      if (decoded.email === "adminentrepaginas@gmail.com") {
-        setIsAdmin(true);
-      }
-
-      const fetchBooks = async () => {
-        const res = await fetch("http://localhost:3000/libros/usuario", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
-        setBooks(data.datos || []);
-      };
-
-      fetchBooks();
-    } catch (error) {
-      console.error("Error al obtener libros:", error);
-    }
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 30000); // cada 30 segundos
+    return () => clearInterval(interval);
   }, []);
 
-  const handleDelete = async (id) => {
-    const confirm = window.confirm("¿Estás seguro de eliminar este libro?");
-    if (!confirm) return;
+  useEffect(() => {
+    if (openMessagesModal) {
+      setNewMessageCount(0);
+    }
+  }, [openMessagesModal]);
+
+  const handleSendReply = async (receptorId) => {
+    if (!replyText.trim()) return;
 
     try {
-      const token = localStorage.getItem("token");
-      await fetch(`http://localhost:3000/libros/${id}`, {
-        method: "DELETE",
+      const res = await fetch("http://localhost:3000/mensajes", {
+        method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
+        body: JSON.stringify({
+          emisor_id: userId,
+          receptor_id: receptorId,
+          mensaje: replyText,
+          correo: null
+        })
       });
-      setBooks((prev) => prev.filter((book) => book.id !== id));
+
+      if (!res.ok) throw new Error("Error al enviar respuesta");
+
+      setReplyText("");
+      fetchMessages(); 
     } catch (error) {
-      console.error("Error al eliminar libro:", error);
+      console.error("Error al responder:", error);
+      alert("Error al responder.");
     }
   };
 
+  const groupedMessages = allMessages.reduce((acc, msg) => {
+    const key = [msg.emisor_id, msg.receptor_id].sort().join("-");
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(msg);
+    return acc;
+  }, {});
+
   return (
-    <>
-      <Header
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        isAdmin={isAdmin}
-      />
-      <div className="workspace-layout">
-        <div className="workspace-container">
-          <Sidebar isAdmin={isAdmin} />
-
-          <div className="workspace_content_wrapper">
-            <div className="user-books-section">
-              <h2>Mis Libros</h2>
-
-              {books.length === 0 ? (
-                <div style={{ textAlign: "center", marginTop: "30px" }}>
-                  <p>No tienes libros agregados.</p>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      gap: "10px",
-                      marginTop: "10px",
-                    }}
-                  >
-                    <button
-                      className="btn-primary"
-                      onClick={() => navigate("/add-book")}
-                    >
-                      ➕ Agregar Libro
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <ul className="user-book-list">
-                  {books.map((book) => (
-                    <li key={book.id} className="user-book-card">
-                      <img
-                        src={
-                          book.imagen && book.imagen !== "null" && book.imagen.trim() !== ""
-                            ? `http://localhost:3000/uploads/${book.imagen}`
-                            : defaultImage
-                        }
-                        alt={book.titulo}
-                        className="bookcards-image"
-                        onClick={() => openDetails(book)}
-                        style={{ cursor: "pointer" }}
-                      />
-                      <h4>{book.titulo}</h4>
-                      <p>
-                        <strong>Autor:</strong> {book.autor}
-                      </p>
-                      <p>
-                        <strong>Precio:</strong> {book.precio}
-                      </p>
-                      <p className={`estado-libro ${book.activo ? 'activo' : 'inactivo'}`}>
-                        {book.activo ? 'Disponible' : 'Vendido / No disponible'}
-                      </p>
-                      <p
-                        onClick={() => openDetails(book)}
-                        style={{ cursor: "pointer", textDecoration: "underline", color: "#5D4037" }}
-                      >
-                        Ver descripción
-                      </p>
-                      <div className="user-book-actions">
-                        <button
-                          className="btn-edit"
-                          onClick={() => navigate(`/edit-book/${book.id}`)}
-                        >
-                          Editar
-                        </button>
-                        <button
-                          className="btn-delete"
-                          onClick={() => handleDelete(book.id)}
-                        >
-                          Eliminar
-                        </button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            <footer className="footer_Workspace">
-              <p className="footer_Workspace_text">
-                © Todos los derechos reservados - Entre Páginas 2025
-              </p>
-            </footer>
-          </div>
-        </div>
-
-        <BookDetailsModal
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-          book={selectedBook}
-        />
+    <header className="header_WorkSpace_bar">
+      <div className="header_left">
+        <img className="header_WorkSpace_icon" src={logo} alt="Logo Entre Páginas" />
+        <h1 className="header_WorkSpace_title">Entre Páginas</h1>
       </div>
-    </>
+
+      {!isAdmin && (
+        <div className="header_center">
+          <form onSubmit={(e) => e.preventDefault()} className="search_form_header">
+            <input
+              type="text"
+              placeholder="Buscar libros..."
+              value={searchTerm}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="search_input_header"
+            />
+            <button type="submit" className="search_btn_header">Buscar</button>
+          </form>
+        </div>
+      )}
+
+      <div className="header_right">
+        {!isAdmin && (
+          <>
+            <button onClick={onOpenCart} className="cart-icon-button">
+              <FaShoppingCart size={35} />
+              {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+            </button>
+            <button onClick={() => setOpenMessagesModal(true)} className="cart-icon-button">
+              <Badge badgeContent={newMessageCount} color="error">
+                <FiMessageSquare size={32} />
+              </Badge>
+            </button>
+          </>
+        )}
+        <button className="logout_btn_WorkSpace" onClick={handleLogout}>
+          Cerrar sesión
+        </button>
+      </div>
+
+      <Modal open={openMessagesModal} onClose={() => setOpenMessagesModal(false)}>
+        <Box sx={{ width: 450, maxHeight: "80vh", overflowY: "auto", margin: "auto", marginTop: "5%", bgcolor: 'white', p: 3, borderRadius: 2, fontFamily: 'Outfit, sans-serif', color: '#5D4037' }}>
+          <h3 style={{ textAlign: 'center', fontWeight: 'bold' }}>Mensajes Recibidos</h3>
+
+          {Object.keys(groupedMessages).length === 0 ? (
+            <Typography align="center">No tienes mensajes nuevos.</Typography>
+          ) : (
+            Object.entries(groupedMessages).map(([key, messages]) => (
+              <Box key={key} sx={{ mb: 3, p: 2, bgcolor: '#f5efe6', borderRadius: 2 }}>
+                {messages.sort((a, b) => new Date(a.fecha) - new Date(b.fecha)).map((msg, idx) => (
+                  <Typography
+                    key={idx}
+                    sx={{
+                      textAlign: msg.emisor_id == userId ? "right" : "left",
+                      bgcolor: msg.emisor_id == userId ? '#D7CCC8' : '#EFEBE9',
+                      px: 2, py: 1, borderRadius: 2, mb: 1
+                    }}>
+                    <strong>{msg.emisor?.nombre || 'Tú'}:</strong> {msg.mensaje}<br />
+                    <small>{new Date(msg.fecha).toLocaleString()}</small>
+                  </Typography>
+                ))}
+
+                <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    placeholder="Escribe una respuesta"
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                  />
+                  <Button variant="contained" onClick={() => handleSendReply(messages[0].emisor_id == userId ? messages[0].receptor_id : messages[0].emisor_id)}
+                    sx={{ bgcolor: '#5D4037', '&:hover': { bgcolor: '#4E342E' } }}>
+                    Enviar
+                  </Button>
+                </Box>
+              </Box>
+            ))
+          )}
+        </Box>
+      </Modal>
+    </header>
   );
 };
 
-export default UserBooks;
+export default Header;
