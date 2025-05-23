@@ -50,7 +50,7 @@ const WorkSpace = () => {
       searchTerm={searchTerm}
       onSearchChange={setSearchTerm}
       isAdmin={isAdmin}
-      onOpenCart={() => setOpenCartModal(true)} // importante
+      onOpenCart={() => setOpenCartModal(true)} 
     />
        <img
               src={bannerLibro}

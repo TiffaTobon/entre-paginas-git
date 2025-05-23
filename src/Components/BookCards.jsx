@@ -79,7 +79,7 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
               onClick={() => {
                 const token = localStorage.getItem("token");
                 if (!token) {
-                  if (onOpenLogin) onOpenLogin(); //Abre el modal de login si no hay token
+                  if (onOpenLogin) onOpenLogin(); n
                   return;
                 }
 
@@ -91,6 +91,8 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
                   image: book.imagen
                     ? `http://localhost:3000/uploads/${book.imagen}`
                     : placeholderImage,
+                  stock: book.stock, // aquí se incluye el stock real
+                  quantity: 1        // cantidad inicial
                 });
               }}
               className="buy-button"

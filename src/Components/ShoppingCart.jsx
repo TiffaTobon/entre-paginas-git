@@ -1,9 +1,8 @@
-import React from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import placeholderImage from "../assets/Images/placeholder-book.jpg";
 import "../styles/ShoppingCart.css";
-import { FiTrash2, FiArrowLeft, FiShoppingCart } from "react-icons/fi";
+import { FiTrash2, FiShoppingCart } from "react-icons/fi";
 import { Button } from "@mui/material";
 
 const ShoppingCart = ({ onClose }) => {
@@ -87,7 +86,7 @@ const ShoppingCart = ({ onClose }) => {
                     <span>{book.quantity || 1}</span>
                     <button 
                       onClick={() => handleQuantityChange(index, (book.quantity || 1) + 1)}
-                      disabled={(book.quantity || 1) >= 10}
+                      disabled={(book.quantity || 1) >= book.stock}
                     >
                       +
                     </button>

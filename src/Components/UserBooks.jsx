@@ -122,6 +122,9 @@ const UserBooks = () => {
                       <p>
                         <strong>Precio:</strong> {book.precio}
                       </p>
+                      <p className={`estado-libro ${book.activo ? 'activo' : 'inactivo'}`}>
+                        {book.activo ? 'Disponible' : 'Vendido / No disponible'}
+                      </p>
                       <p
                         onClick={() => openDetails(book)}
                         style={{ cursor: "pointer", textDecoration: "underline", color: "#5D4037" }}

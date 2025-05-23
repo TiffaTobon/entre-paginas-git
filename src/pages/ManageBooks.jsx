@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Modal, Box, Button } from "@mui/material";
-import axios from "axios";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 import CartModal from "../Components/CartModal";
@@ -94,7 +93,7 @@ const ManageBooks = () => {
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         isAdmin={isAdmin}
-        onOpenCart={() => setOpenCartModal(true)} // importante
+        onOpenCart={() => setOpenCartModal(true)} 
       />
 
       <img
@@ -151,6 +150,9 @@ const ManageBooks = () => {
                     <h4>{book.titulo}</h4>
                     <p><strong>Autor:</strong> {book.autor}</p>
                     <p><strong>Precio:</strong> {book.precio}</p>
+                    <p className={`estado-libro ${book.activo ? 'activo' : 'inactivo'}`}>
+                        {book.activo ? 'Disponible' : 'Vendido / No disponible'}
+                      </p>
                     <p
                       onClick={() => openDetails(book)}
                       style={{ cursor: "pointer", textDecoration: "underline", color: "#5D4037" }}

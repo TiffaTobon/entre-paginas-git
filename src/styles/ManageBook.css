@@ -119,6 +119,16 @@
     margin: 40px auto;
   }
   
+  .estado-libro.activo {
+  color: green !important;
+  font-weight: bold;
+  }
+
+  .estado-libro.inactivo {
+    color: red;
+    font-weight: bold;
+  }
+
   .footer_Workspace {
   background-color: #F4E1C1;
   color: #5D4037;

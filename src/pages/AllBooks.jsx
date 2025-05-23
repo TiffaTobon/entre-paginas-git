@@ -21,7 +21,7 @@ const AllBooks = () => {
         onOpenCart={() => setOpenCartModal(true)}
       />
       <div className="workspace_content" style={{ padding: "20px" }}>
-       <h2 style={{ marginBottom: "30px", textAlign: "center", fontSize: "2rem" }}>
+       <h2 style={{ marginBottom: "30px", textAlign: "center", fontSize: "2rem", color: "#5D4037" }}>
           Todos los Libros
         </h2>
         <BookCards searchTerm={searchTerm} showPagination={true} />

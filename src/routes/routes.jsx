@@ -1,5 +1,3 @@
-// routes.jsx
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import MainPanel from "../pages/MainPanel";
 import Login from "../pages/Login";

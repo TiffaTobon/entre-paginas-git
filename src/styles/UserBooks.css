@@ -140,3 +140,13 @@
   margin-top: 10px;
   margin-bottom: 20px;
 }
+
+.estado-libro.activo {
+  color: green;
+  font-weight: bold;
+}
+
+.estado-libro.inactivo {
+  color: red;
+  font-weight: bold;
+}
