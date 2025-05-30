@@ -104,6 +104,10 @@ const ManageBooks = () => {
     fetchUserBooks();
   }, []);
 
+  const filteredBooks = books.filter((book) =>
+  book.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
   return (
     <div className="workspace-layout">
       <Header
@@ -149,9 +153,13 @@ const ManageBooks = () => {
                 <h3>No tienes libros agregados.</h3>
                 <p>Haz clic en "Agregar Libro" para crear uno nuevo.</p>
               </div>
+            ) : filteredBooks.length === 0 ? (
+              <div className="empty-book-card">
+                <h3>No se hallaron resultados para su búsqueda.</h3>
+              </div>
             ) : (
               <ul className="user-book-list">
-                {books.map((book) => (
+                {filteredBooks.map((book) => (
                   <li key={book.id} className="user-book-card">
                     <div className="book-image">
                       <img
@@ -170,7 +178,7 @@ const ManageBooks = () => {
                     <p><strong>Autor:</strong> {book.autor}</p>
                     <p><strong>Precio:</strong> {book.precio}</p>
                     <p className={`estado-libro ${book.activo ? 'activo' : 'inactivo'}`}>
-                      {book.activo ? 'Disponible' : 'Vendido / No disponible'}
+                      {book.activo ? 'Disponible' : 'Vendido o Separado / No disponible'}
                     </p>
                     <p
                       onClick={() => openDetails(book)}
@@ -206,7 +214,7 @@ const ManageBooks = () => {
                       }}
                         onClick={() => handleToggleStock(book)}
                       >
-                        {book.activo ? 'SEPARAR' : 'SEPARADO'}
+                        {book.activo ? 'SEPARAR' : 'CANCELAR'}
                       </Button>
                     </div>
                   </li>

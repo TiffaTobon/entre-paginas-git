@@ -8,7 +8,6 @@ import { Modal, Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import bannerLibro from "../assets/Images/bannerlibro.png";
 import CartModal from "../Components/CartModal";
-
 import "../styles/WorkSpace.css";
 import "../styles/Header.css";
 

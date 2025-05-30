@@ -152,9 +152,8 @@ const Payment = () => {
             <TextField label="Nombre completo" name="firstName" value={formData.firstName} onChange={handleInputChange} fullWidth margin="normal" />
             <TextField label="Cédula" name="idNumber" value={formData.idNumber} onChange={handleInputChange} fullWidth margin="normal" />
             <TextField label="Dirección" name="address" value={formData.address} onChange={handleInputChange} fullWidth margin="normal" />
-            <TextField label="Complemento (opcional)" name="address2" value={formData.address2} onChange={handleInputChange} fullWidth margin="normal" />
+            <TextField label="Complemento: Barrio, casa, apto (opcional)" name="address2" value={formData.address2} onChange={handleInputChange} fullWidth margin="normal" />
             <TextField label="Ciudad" name="city" value={formData.city} onChange={handleInputChange} fullWidth margin="normal" />
-            <TextField label="Código postal (opcional)" name="zipCode" value={formData.zipCode} onChange={handleInputChange} fullWidth margin="normal" />
             <TextField label="Teléfono" name="phone" value={formData.phone} onChange={handleInputChange} fullWidth margin="normal" />
             <FormControlLabel
               control={<Checkbox checked={saveInfo} onChange={() => setSaveInfo(!saveInfo)} />}
