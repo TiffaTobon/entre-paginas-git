@@ -110,7 +110,7 @@ const Header = ({ searchTerm, onSearchChange, onOpenCart, isAdmin }) => {
           <form onSubmit={(e) => e.preventDefault()} className="search_form_header">
             <input
               type="text"
-              placeholder="Buscar libros..."
+              placeholder="Buscar Título..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
               className="search_input_header"

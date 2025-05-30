@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import "../styles/SearchBar.css"; // Asegúrate de importar el CSS
+import "../styles/SearchBar.css"; 
 
 function SearchBar() {
   const [search, setSearch] = useState("");
@@ -14,7 +14,7 @@ function SearchBar() {
       <input
         type="text"
         className="searchbar-input"
-        placeholder="Buscar libros..."
+        placeholder="Buscar Título..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />

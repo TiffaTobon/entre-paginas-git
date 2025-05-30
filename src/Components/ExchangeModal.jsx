@@ -1,39 +1,47 @@
-// src/Components/ExchangeModal.jsx
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Box, TextField, Button, Typography } from "@mui/material";
 
 const ExchangeModal = ({ open, onClose, book, onSend }) => {
-  const [message, setMessage] = React.useState("");
+const [message, setMessage] = React.useState("");
+const [error, setError] = useState("");
+
 
  const handleSend = async () => {
+  if (!message.trim()) {
+    setError("Debe ingresar algún mensaje.");
+    return;
+  }
+
   const token = localStorage.getItem("token");
   const emisor_id = localStorage.getItem("usuario_id");
 
   try {
     const res = await fetch("http://localhost:3000/mensajes", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            emisor_id,
-            receptor_id: book.usuario_id, // El dueño del libro
-            mensaje: message,
-            correo: null
-        })
-        });
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        emisor_id,
+        receptor_id: book.usuario_id,
+        mensaje: message,
+        correo: null
+      })
+    });
 
-        if (!res.ok) throw new Error("Error al enviar el mensaje");
+    if (!res.ok) throw new Error("Error al enviar el mensaje");
 
-        const data = await res.json();
-        alert("Tu solicitud de intercambio fue enviada con éxito.");
-        onClose(); // cerrar el modal
-    } catch (error) {
-        console.error("Error al enviar mensaje:", error);
-        alert("Hubo un error al enviar tu solicitud.");
-    }
-    };
+    const data = await res.json();
+    alert("Tu mensaje fue enviado con éxito.");
+    setError("");       // Limpia cualquier error anterior
+    setMessage("");     // Limpia el campo de mensaje
+    onClose();          // Cierra el modal
+  } catch (error) {
+    console.error("Error al enviar mensaje:", error);
+    alert("Hubo un error al enviar tu solicitud.");
+  }
+};
 
 
   return (
@@ -50,7 +58,7 @@ const ExchangeModal = ({ open, onClose, book, onSend }) => {
                 boxShadow: 24,
                 p: 4,
                 fontFamily: 'Outfit, sans-serif',
-                color: '#5D4037' // 👈 esto aplica a todo
+                color: '#5D4037' // esto aplica a todo
             }}
             >
         <Typography
@@ -75,6 +83,11 @@ const ExchangeModal = ({ open, onClose, book, onSend }) => {
           onChange={(e) => setMessage(e.target.value)}
           fullWidth
         />
+        {error && (
+            <p style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>
+              {error}
+            </p>
+          )}
         <Button
             variant="contained"
             onClick={handleSend}

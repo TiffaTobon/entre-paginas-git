@@ -64,7 +64,26 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
   if (loading) return <p>Cargando libros...</p>;
 
   return (
-    <>
+  <>
+    {books.length === 0 ? (
+      <div style={{ 
+        textAlign: "center", 
+        marginTop: "30px", 
+        marginBottom: "30px",
+        color: "#8d6e63", 
+        fontFamily: "'Outfit', sans-serif" 
+      }}>
+        <img 
+          src="https://cdn-icons-png.flaticon.com/512/7486/7486790.png" 
+          alt="Sin resultados" 
+          style={{ width: "80px", opacity: 0.6, marginBottom: "10px" }} 
+        />
+        <h3 style={{ marginBottom: "5px", fontSize: "25px" }}>Oops...</h3>
+        <p style={{ fontStyle: "ioutfit", fontSize: "25px" }}>
+          No se hallaron resultados para su búsqueda.
+        </p>
+      </div>
+    ) : (
       <ul className="bookcards-list">
         {books.map((book, index) => (
           <li key={index} className="bookcards-item">
@@ -88,7 +107,7 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
               Ver descripción
             </button>
 
-           <div className="bookcard-buttons">
+            <div className="bookcard-buttons">
               <Tooltip title="Intercambiar">
                 <button
                   className="icon-button interchange-button"
@@ -128,19 +147,21 @@ const BookCards = ({ searchTerm, limit, showPagination = true, onOpenLogin }) =>
           </li>
         ))}
       </ul>
-      <BookDetailsModal
-        open={openModal}
-        onClose={handleCloseModal}
-        book={selectedBook}
-      />
-      <ExchangeModal
-        open={openExchange}
-        onClose={() => setOpenExchange(false)}
-        book={selectedBook}
-        onSend={(msg) => console.log("Mensaje enviado:", msg)}
-      />
-    </>
-  );
+    )}
+
+    <BookDetailsModal
+      open={openModal}
+      onClose={handleCloseModal}
+      book={selectedBook}
+    />
+    <ExchangeModal
+      open={openExchange}
+      onClose={() => setOpenExchange(false)}
+      book={selectedBook}
+      onSend={(msg) => console.log("Mensaje enviado:", msg)}
+    />
+  </>
+)
 };
 
 export default BookCards;

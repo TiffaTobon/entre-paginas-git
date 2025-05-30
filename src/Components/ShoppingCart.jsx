@@ -22,7 +22,7 @@ const ShoppingCart = ({ onClose }) => {
   };
 
   const handleQuantityChange = (index, newQuantity) => {
-    if (newQuantity >= 1 && newQuantity <= 10) {
+    if (newQuantity >= 1 && newQuantity <= 1) {
       updateQuantity(index, newQuantity);
     }
   };

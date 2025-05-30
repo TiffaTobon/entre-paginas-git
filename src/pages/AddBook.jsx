@@ -15,7 +15,6 @@ const AddBook = ({ onClose, onSuccess }) => {
     descripcion: "",
     autor: "",
     precio: "",
-    stock: "",
     imagen: null,
   });
 
@@ -56,7 +55,7 @@ const AddBook = ({ onClose, onSuccess }) => {
 
       alert("Libro agregado correctamente");
       if (onSuccess) onSuccess(); // recarga libros
-      if (onClose) onClose(); // cierra modal
+      if (onClose) onClose(); 
     } catch (error) {
       console.error("Error al agregar libro:", error);
       alert("Error al agregar el libro");
@@ -83,7 +82,6 @@ const AddBook = ({ onClose, onSuccess }) => {
           fullWidth
         />
         <TextField label="Precio (COP)" name="precio" type="number" required fullWidth onChange={handleChange} />
-        <TextField label="Stock" name="stock" type="number" required fullWidth onChange={handleChange} />
         <Button variant="outlined" component="label">
           Subir Imagen
           <input type="file" name="imagen" hidden accept="image/*" onChange={handleChange} />
